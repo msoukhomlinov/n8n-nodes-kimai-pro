@@ -486,7 +486,7 @@ export class Kimai implements INodeType {
 			{
 				displayName: 'Budget',
 				name: 'budget',
-				type: 'number',
+				type: 'string',
 				description: 'The money budget',
 				displayOptions: {
 					show: {
@@ -1263,7 +1263,7 @@ export class Kimai implements INodeType {
 			{
 				displayName: 'Budget',
 				name: 'budget',
-				type: 'number',
+				type: 'string',
 				description: 'The money budget',
 				displayOptions: {
 					show: {
@@ -1865,7 +1865,7 @@ export class Kimai implements INodeType {
 			{
 				displayName: 'Budget',
 				name: 'budget',
-				type: 'number',
+				type: 'string',
 				description: 'The money budget',
 				displayOptions: {
 					show: {
