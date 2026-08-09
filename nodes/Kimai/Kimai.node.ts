@@ -282,7 +282,7 @@ export class Kimai implements INodeType {
 						operation: ['create', 'update'],
 					},
 				},
-				default: '[]',
+				default: '',
 			},
 			{
 				displayName: 'Projects',
