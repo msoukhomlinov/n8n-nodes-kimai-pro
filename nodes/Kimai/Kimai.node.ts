@@ -300,7 +300,7 @@ export class Kimai implements INodeType {
 					send: {
 						type: 'query',
 						property: 'projects[]',
-						value: '={{$value.split(",").map(v => v.trim())}}',
+						value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
 					},
 				},
 			},
@@ -1632,7 +1632,7 @@ export class Kimai implements INodeType {
 					send: {
 						type: 'query',
 						property: 'customers[]',
-						value: '={{$value.split(",").map(v => v.trim())}}',
+						value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
 					},
 				},
 			},
@@ -2716,7 +2716,7 @@ export class Kimai implements INodeType {
 					send: {
 						type: 'query',
 						property: 'users[]',
-						value: '={{$value.split(",").map(v => v.trim())}}',
+						value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
 					},
 				},
 			},
@@ -2748,7 +2748,7 @@ export class Kimai implements INodeType {
 					send: {
 						type: 'query',
 						property: 'customers[]',
-						value: '={{$value.split(",").map(v => v.trim())}}',
+						value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
 					},
 				},
 			},
@@ -2780,7 +2780,7 @@ export class Kimai implements INodeType {
 					send: {
 						type: 'query',
 						property: 'projects[]',
-						value: '={{$value.split(",").map(v => v.trim())}}',
+						value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
 					},
 				},
 			},
@@ -2812,7 +2812,7 @@ export class Kimai implements INodeType {
 					send: {
 						type: 'query',
 						property: 'activities[]',
-						value: '={{$value.split(",").map(v => v.trim())}}',
+						value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
 					},
 				},
 			},
@@ -3606,7 +3606,7 @@ export class Kimai implements INodeType {
 					send: {
 						type: 'query',
 						property: 'customers[]',
-						value: '={{$value.split(",").map(v => v.trim())}}',
+						value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
 					},
 				},
 			},
@@ -3626,7 +3626,7 @@ export class Kimai implements INodeType {
 					send: {
 						type: 'query',
 						property: 'status[]',
-						value: '={{$value.split(",").map(v => v.trim())}}',
+						value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
 					},
 				},
 			},
