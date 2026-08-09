@@ -27,6 +27,5 @@ Dockerfile.dev
 .DS_Store
 *.log
 node_modules/
-api-docs.json
 
 

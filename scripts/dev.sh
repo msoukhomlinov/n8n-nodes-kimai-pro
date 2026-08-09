@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Development helper script for n8n-mailcoach node
+# Development helper script for n8n-kimai node
 
 set -e
 
-echo "🚀 Starting n8n-mailcoach development environment..."
+echo "🚀 Starting n8n-kimai development environment..."
 
 # Check if dist folder exists
 if [ ! -d "dist" ]; then

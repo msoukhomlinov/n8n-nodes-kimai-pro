@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Test script for n8n-mailcoach node
+# Test script for n8n-kimai node
 
 set -e
 
-echo "🧪 Testing n8n-mailcoach node..."
+echo "🧪 Testing n8n-kimai node..."
 
 # Build the node
 echo "📦 Building node..."
