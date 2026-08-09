@@ -3146,7 +3146,7 @@ export class Kimai implements INodeType {
 									accountNumber: '={{$parameter["accountNumber"] || undefined}}',
 									color: '={{$parameter["color"] || undefined}}',
 									email: '={{$parameter["email"] || undefined}}',
-									language: '={{$parameter["language"] || undefined}}',
+									language: '={{$parameter["language"] ?? undefined}}',
 									locale: '={{$parameter["locale"] || undefined}}',
 									timezone: '={{$parameter["timezone"] || undefined}}',
 									supervisor: '={{$parameter["supervisor"] || undefined}}',
