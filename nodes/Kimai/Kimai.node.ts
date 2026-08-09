@@ -494,7 +494,7 @@ export class Kimai implements INodeType {
 						operation: ['create', 'update'],
 					},
 				},
-				default: 0,
+				default: '',
 			},
 			{
 				displayName: 'Time Budget',
@@ -1271,7 +1271,7 @@ export class Kimai implements INodeType {
 						operation: ['create', 'update'],
 					},
 				},
-				default: 0,
+				default: '',
 			},
 			{
 				displayName: 'Time Budget',
@@ -1470,7 +1470,7 @@ export class Kimai implements INodeType {
 									start: '={{$parameter["start"] || undefined}}',
 									end: '={{$parameter["end"] || undefined}}',
 									ignoreDates: '={{$parameter["ignoreDates"] || undefined}}',
-									globalActivities: '={{$parameter["globalActivities"] || undefined}}',
+									globalActivities: '={{$parameter["globalActivities"] ?? undefined}}',
 									order: '={{$parameter["order"] || undefined}}',
 									orderBy: '={{$parameter["orderBy"] || undefined}}',
 									term: '={{$parameter["term"] || undefined}}',
@@ -1873,7 +1873,7 @@ export class Kimai implements INodeType {
 						operation: ['create', 'update'],
 					},
 				},
-				default: 0,
+				default: '',
 			},
 			{
 				displayName: 'Time Budget',
