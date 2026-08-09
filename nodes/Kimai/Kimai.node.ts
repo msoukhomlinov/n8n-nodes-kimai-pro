@@ -274,15 +274,15 @@ export class Kimai implements INodeType {
 			{
 				displayName: 'Team ID',
 				name: 'teams',
-				type: 'string',
-				description: 'Team ID to assign to this activity',
+				type: 'json',
+				description: 'Array of Team IDs',
 				displayOptions: {
 					show: {
 						resource: ['activity'],
 						operation: ['create', 'update'],
 					},
 				},
-				default: '',
+				default: '[]',
 			},
 			{
 				displayName: 'Projects',
