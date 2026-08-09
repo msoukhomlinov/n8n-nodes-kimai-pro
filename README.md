@@ -21,6 +21,7 @@ An n8n community node for integrating with [Kimai](https://www.kimai.org/) time-
 - **Declarative Style**: Uses n8n's declarative routing for clean, maintainable code
 - **Full Query Support**: Filtering, sorting, pagination, and search capabilities
 - **Array Parameters**: Support for array query parameters (projects[], customers[], etc.)
+- **API Version**: Compatible with Kimai API v1.1
 
 ## Installation
 
