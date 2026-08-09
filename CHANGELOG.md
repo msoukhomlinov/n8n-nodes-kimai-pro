@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-08-09
+
+### Changed
+- **Aligned to Kimai API v1.1 specification**
+- Customer address fields renamed from snake_case to camelCase: `address_line1` → `addressLine1`, `address_line2` → `addressLine2`, `address_line3` → `addressLine3`, `postcode` → `postCode`
+- Activity `teams` parameter changed from single integer to array of integers (`json` type)
+
+### Added
+- **Customer**: `language` (required), `invoiceEmail`, `teams`, `budget`, `timeBudget`, `budgetType`
+- **Activity**: `budget`, `timeBudget`, `budgetType`
+- **Project**: `teams`, `budget`, `timeBudget`, `budgetType`
+- Catalan (`ca`) added to language enum
+- UI parameters for all new fields
+
+### Fixed
+- Query parameters now use `|| undefined` for optional values to prevent sending empty strings (fixes 500 errors on list endpoints)
+- PATCH requests use `?? undefined` for budget to preserve zero values
+- Array query routes (`projects[]`, `customers[]`, `activities[]`, `users[]`, `tags[]`) filter empty strings
+- Global Activities filter preserves `false` value
 ## [1.0.3] - 2024-12-02
 
 ### Added
