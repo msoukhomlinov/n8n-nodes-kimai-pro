@@ -52,8 +52,8 @@ export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePro
     const operation = this.getCurrentNodeParameter('operation') as string;
     const resource = this.getCurrentNodeParameter('resource') as string;
 
-    // Use visible=1 for timesheet create/update to hide inactive projects
-    const isTimesheetCreate = resource === 'timesheet' && (operation === 'create' || operation === 'update');
+    // Use visible=1 for timesheet create only, visible=3 for update and management
+    const isTimesheetCreate = resource === 'timesheet' && operation === 'create';
     const visible = isTimesheetCreate ? '1' : '3';
 
     const items = await fetchEntities.call(this, '/api/projects', { visible, ignoreDates: '1' });
