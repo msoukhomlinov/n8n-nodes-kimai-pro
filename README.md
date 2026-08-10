@@ -1,6 +1,6 @@
-# n8n-nodes-kimai
+# n8n-nodes-kimai-pro
 
-[![npm version](https://img.shields.io/npm/v/n8n-nodes-kimai.svg)](https://www.npmjs.com/package/n8n-nodes-kimai)
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-kimai-pro.svg)](https://www.npmjs.com/package/n8n-nodes-kimai-pro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An n8n community node for integrating with [Kimai](https://www.kimai.org/) time-tracking software. This node provides comprehensive access to the Kimai REST API, allowing you to automate time tracking, manage projects, customers, activities, teams, invoices, and more.
@@ -60,14 +60,14 @@ Install directly from n8n:
 
 1. Go to **Settings** → **Community Nodes**
 2. Click **Install**
-3. Enter: `n8n-nodes-kimai`
+3. Enter: `n8n-nodes-kimai-pro`
 4. Click **Install**
 
 ### Manual Installation
 
 ```bash
 cd ~/.n8n/nodes
-npm install n8n-nodes-kimai
+npm install n8n-nodes-kimai-pro
 ```
 
 Restart n8n to load the node.
@@ -306,8 +306,8 @@ The node will return error responses from the Kimai API. Common errors:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Pixel-Process-UG/n8n-nodes-kimai.git
-   cd n8n-nodes-kimai
+   git clone https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro.git
+   cd n8n-nodes-kimai-pro
    ```
 
 2. Install dependencies:
@@ -323,7 +323,7 @@ The node will return error responses from the Kimai API. Common errors:
 4. Link to your n8n installation:
    ```bash
    cd ~/.n8n/nodes
-   ln -s /path/to/n8n-nodes-kimai n8n-nodes-kimai
+   ln -s /path/to/n8n-nodes-kimai-pro n8n-nodes-kimai-pro
    ```
 
 ### Watch Mode
@@ -347,7 +347,7 @@ npm run dev
 ### Project Structure
 
 ```
-n8n-nodes-kimai/
+n8n-nodes-kimai-pro/
 ├── credentials/
 │   └── KimaiApi.credentials.ts    # API credentials configuration
 ├── nodes/
@@ -440,7 +440,7 @@ This project uses GitHub Actions to automatically publish to npm when a new rele
 
 ## Issues
 
-If you encounter any issues or have questions, please [open an issue on GitHub](https://github.com/Pixel-Process-UG/n8n-nodes-kimai/issues).
+If you encounter any issues or have questions, please [open an issue on GitHub](https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/issues).
 
 ## Changelog
 

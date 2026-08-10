@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-kimai",
+  "name": "n8n-nodes-kimai-pro",
   "version": "1.1.0",
   "description": "n8n community node for Kimai time-tracking software API integration",
   "keywords": [
@@ -9,17 +9,17 @@
     "timesheet"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/Pixel-Process-UG/n8n-nodes-kimai#readme",
+  "homepage": "https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro#readme",
   "author": {
     "name": "Pixel & Process UG (haftungsbeschr\u00e4nkt)",
     "email": "info@pixelandprocess.de"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Pixel-Process-UG/n8n-nodes-kimai.git"
+    "url": "git+https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro.git"
   },
   "bugs": {
-    "url": "https://github.com/Pixel-Process-UG/n8n-nodes-kimai/issues"
+    "url": "https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/issues"
   },
   "main": "index.js",
   "scripts": {

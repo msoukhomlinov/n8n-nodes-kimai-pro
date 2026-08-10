@@ -24,7 +24,7 @@ If applicable, add screenshots to help explain your problem.
 
 ## Environment
 - n8n version: [e.g. 1.0.0]
-- n8n-nodes-kimai version: [e.g. 1.0.0]
+- n8n-nodes-kimai-pro version: [e.g. 1.0.0]
 - Kimai version: [e.g. 2.0.0]
 - Node.js version: [e.g. 18.0.0]
 - OS: [e.g. Ubuntu 22.04]

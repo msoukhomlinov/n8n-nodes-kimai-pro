@@ -1,4 +1,4 @@
-# Contributing to n8n-nodes-kimai
+# Contributing to n8n-nodes-kimai-pro
 
 Thank you for your interest in contributing to the Kimai n8n node!
 
@@ -13,8 +13,8 @@ Thank you for your interest in contributing to the Kimai n8n node!
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Pixel-Process-UG/n8n-nodes-kimai.git
-   cd n8n-nodes-kimai
+   git clone https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro.git
+   cd n8n-nodes-kimai-pro
    ```
 
 2. **Install dependencies**:
