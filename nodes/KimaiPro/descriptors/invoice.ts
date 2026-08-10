@@ -30,7 +30,7 @@ export const invoiceDescriptor: ResourceDescriptor = {
 					qs: {
 						begin: '={{$parameter["begin"]}}',
 						end: '={{$parameter["end"]}}',
-						'customers[]': '={{$parameter["customers"]}}',
+						'customers[]': '={{Object.keys($parameter["customers"])}}',
 						'status[]': '={{$parameter["status"]}}',
 						page: '={{$parameter["page"]}}',
 						size: '={{$parameter["size"]}}',
