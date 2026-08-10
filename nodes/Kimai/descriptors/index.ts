@@ -1,0 +1,10 @@
+export { activityDescriptor } from './activity';
+export { customerDescriptor } from './customer';
+export { projectDescriptor } from './project';
+export { tagDescriptor } from './tag';
+export { teamDescriptor } from './team';
+export { timesheetDescriptor } from './timesheet';
+export { userDescriptor } from './user';
+export { invoiceDescriptor } from './invoice';
+export { defaultDescriptor } from './default';
+export type { ResourceDescriptor, OperationDefinition } from './types';
