@@ -11,8 +11,7 @@
   "license": "MIT",
   "homepage": "https://github.com/msoukhomlinov/n8n-nodes-kimai-pro#readme",
   "author": {
-    "name": "Max Soukhomlinov",
-    "email": "max@pixelandprocess.de"
+    "name": "Max Soukhomlinov"
   },
   "repository": {
     "type": "git",
