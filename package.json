@@ -9,17 +9,17 @@
     "timesheet"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro#readme",
+  "homepage": "https://github.com/msoukhomlinov/n8n-nodes-kimai-pro#readme",
   "author": {
-    "name": "Pixel & Process UG (haftungsbeschr\u00e4nkt)",
-    "email": "info@pixelandprocess.de"
+    "name": "Max Soukhomlinov",
+    "email": "max@pixelandprocess.de"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro.git"
+    "url": "git+https://github.com/msoukhomlinov/n8n-nodes-kimai-pro.git"
   },
   "bugs": {
-    "url": "https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/issues"
+    "url": "https://github.com/msoukhomlinov/n8n-nodes-kimai-pro/issues"
   },
   "main": "index.js",
   "scripts": {

@@ -306,7 +306,7 @@ The node will return error responses from the Kimai Pro API. Common errors:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro.git
+   git clone https://github.com/msoukhomlinov/n8n-nodes-kimai-pro.git
    cd n8n-nodes-kimai-pro
    ```
 
@@ -440,7 +440,7 @@ This project uses GitHub Actions to automatically publish to npm when a new rele
 
 ## Issues
 
-If you encounter any issues or have questions, please [open an issue on GitHub](https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/issues).
+If you encounter any issues or have questions, please [open an issue on GitHub](https://github.com/msoukhomlinov/n8n-nodes-kimai-pro/issues).
 
 ## Changelog
 
@@ -452,10 +452,10 @@ MIT
 
 ## Author
 
-**Pixel & Process UG (haftungsbeschränkt)**
+**Max Soukhomlinov (haftungsbeschränkt)**
 
 - Email: info@pixel-process.com
-- GitHub: [@Pixel-Process-UG](https://github.com/Pixel-Process-UG)
+- GitHub: [@msoukhomlinov](https://github.com/msoukhomlinov)
 
 ## Acknowledgments
 
