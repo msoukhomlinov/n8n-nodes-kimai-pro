@@ -77,12 +77,11 @@ export const projectDescriptor: ResourceDescriptor = {
 					method: 'GET',
 					url: '/api/projects',
 					qs: {
-						'customers[]': '={{$parameter["customers"] || undefined}}',
+						'customers[]': '={{$parameter["customers"] ? $parameter["customers"].split(",").map(v => v.trim()).filter(v => v !== "") : undefined}}',
 						visible: '={{$parameter["visible"] || undefined}}',
 						start: '={{$parameter["start"] || undefined}}',
 						end: '={{$parameter["end"] || undefined}}',
-						ignoreDates: '={{$parameter["ignoreDates"] || undefined}}',
-						globalActivities: '={{$parameter["globalActivities"] ?? undefined}}',
+						globalActivities: '={{$parameter["globalActivities"] ? "1" : undefined}}',
 						order: '={{$parameter["order"] || undefined}}',
 						orderBy: '={{$parameter["orderBy"] || undefined}}',
 						term: '={{$parameter["term"] || undefined}}',
@@ -355,7 +354,7 @@ export const projectDescriptor: ResourceDescriptor = {
 				send: {
 					type: 'query',
 					property: 'ignoreDates',
-					value: '={{$value ? "1" : ""}}',
+					value: '={{$value ? "1" : undefined}}',
 				},
 			},
 		},
@@ -369,7 +368,7 @@ export const projectDescriptor: ResourceDescriptor = {
 					operation: ['getAll', 'create', 'update'],
 				},
 			},
-			default: true,
+			default: false,
 		},
 		{
 			displayName: 'Order',
