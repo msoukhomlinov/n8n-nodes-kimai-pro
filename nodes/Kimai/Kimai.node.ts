@@ -227,9 +227,6 @@ export class Kimai implements INodeType {
 							request: {
 								method: 'POST',
 								url: '=/api/activities/{{$parameter["id"]}}/team',
-								body: {
-									team: '={{$parameter["teamId"]}}',
-								},
 							},
 						},
 					},
@@ -606,7 +603,6 @@ export class Kimai implements INodeType {
 				displayName: 'Team ID',
 				name: 'teamId',
 				type: 'string',
-				required: true,
 				displayOptions: {
 					show: {
 						resource: ['activity'],
@@ -853,9 +849,6 @@ export class Kimai implements INodeType {
 							request: {
 								method: 'POST',
 								url: '=/api/customers/{{$parameter["id"]}}/team',
-								body: {
-									team: '={{$parameter["teamId"]}}',
-								},
 							},
 						},
 					},
@@ -1527,7 +1520,6 @@ export class Kimai implements INodeType {
 				displayName: 'Team ID',
 				name: 'teamId',
 				type: 'string',
-				required: true,
 				displayOptions: {
 					show: {
 						resource: ['customer'],
@@ -1750,9 +1742,6 @@ export class Kimai implements INodeType {
 							request: {
 								method: 'POST',
 								url: '=/api/projects/{{$parameter["id"]}}/team',
-								body: {
-									team: '={{$parameter["teamId"]}}',
-								},
 							},
 						},
 					},
@@ -2228,7 +2217,6 @@ export class Kimai implements INodeType {
 				displayName: 'Team ID',
 				name: 'teamId',
 				type: 'string',
-				required: true,
 				displayOptions: {
 					show: {
 						resource: ['project'],
@@ -3814,6 +3802,17 @@ export class Kimai implements INodeType {
 							request: {
 								method: 'GET',
 								url: '=/api/invoices/{{$parameter["id"]}}/download',
+								encoding: 'arraybuffer',
+							},
+							output: {
+								postReceive: [
+									{
+										type: 'binaryData',
+										properties: {
+											destinationProperty: 'data',
+										},
+									},
+								],
 							},
 						},
 					},
@@ -4010,6 +4009,9 @@ export class Kimai implements INodeType {
 							request: {
 								method: 'GET',
 								url: '/api/approval-bundle/next-week',
+								qs: {
+									user: '={{$parameter["userId"] || undefined}}',
+								},
 							},
 						},
 					},
@@ -4021,6 +4023,10 @@ export class Kimai implements INodeType {
 							request: {
 								method: 'GET',
 								url: '/api/approval-bundle/overtime_year',
+								qs: {
+									user: '={{$parameter["userId"] || undefined}}',
+									date: '={{$parameter["date"] || undefined}}',
+								},
 							},
 						},
 					},
@@ -4032,6 +4038,10 @@ export class Kimai implements INodeType {
 							request: {
 								method: 'GET',
 								url: '/api/approval-bundle/week-status',
+								qs: {
+									user: '={{$parameter["userId"] || undefined}}',
+									date: '={{$parameter["date"] || undefined}}',
+								},
 							},
 						},
 					},
@@ -4043,6 +4053,10 @@ export class Kimai implements INodeType {
 							request: {
 								method: 'GET',
 								url: '/api/approval-bundle/weekly_overtime',
+								qs: {
+									user: '={{$parameter["userId"] || undefined}}',
+									date: '={{$parameter["date"] || undefined}}',
+								},
 							},
 						},
 					},
@@ -4080,7 +4094,10 @@ export class Kimai implements INodeType {
 			{
 				displayName: 'Date',
 				name: 'date',
-				type: 'dateTime',
+				type: 'string',
+				typeOptions: {
+					dateFormat: 'YYYY-MM-DD',
+				},
 				description: 'Date for approval data (YYYY-MM-DD)',
 				displayOptions: {
 					show: {
