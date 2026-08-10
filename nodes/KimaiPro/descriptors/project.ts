@@ -77,7 +77,7 @@ export const projectDescriptor: ResourceDescriptor = {
 					method: 'GET',
 					url: '/api/projects',
 					qs: {
-						customer: '={{$parameter["customer"] || undefined}}',
+						'customers[]': '={{$parameter["customers"] || undefined}}',
 						visible: '={{$parameter["visible"] || undefined}}',
 						start: '={{$parameter["start"] || undefined}}',
 						end: '={{$parameter["end"] || undefined}}',
@@ -298,13 +298,6 @@ export const projectDescriptor: ResourceDescriptor = {
 				},
 			},
 			default: '',
-			routing: {
-				send: {
-					type: 'query',
-					property: 'customers[]',
-					value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
-				},
-			},
 		},
 		{
 			displayName: 'Visible',
