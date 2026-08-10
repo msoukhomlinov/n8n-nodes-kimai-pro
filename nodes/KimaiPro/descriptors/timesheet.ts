@@ -483,7 +483,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 					operation: ['create', 'update', 'getAll'],
 				},
 			},
-			default: {},
+			default: [],
 			routing: {
 				send: {
 					type: 'query',

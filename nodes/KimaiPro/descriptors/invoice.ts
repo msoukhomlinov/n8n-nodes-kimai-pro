@@ -113,7 +113,7 @@ export const invoiceDescriptor: ResourceDescriptor = {
 					operation: ['getAll'],
 				},
 			},
-			default: {},
+			default: [],
 		},
 		{
 			displayName: 'Status',
