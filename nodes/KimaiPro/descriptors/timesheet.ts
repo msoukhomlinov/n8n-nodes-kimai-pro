@@ -416,6 +416,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 			type: 'options',
 			typeOptions: {
 				loadOptionsMethod: 'getActivities',
+				loadOptionsDependsOn: ['project'],
 			},
 			displayOptions: {
 				show: {
