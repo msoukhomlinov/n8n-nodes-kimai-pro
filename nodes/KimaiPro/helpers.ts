@@ -48,7 +48,10 @@ export async function getCustomers(this: ILoadOptionsFunctions): Promise<INodePr
  */
 export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const items = await fetchEntities.call(this, '/api/projects');
-    return mapToOptions(items);
+    return items.map((item: EntityItem) => ({
+        name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
+        value: String(item.id),
+    }));
 }
 
 /**
@@ -59,9 +62,13 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
     const qs: Record<string, any> = {};
     if (projectId) {
         qs.project = projectId;
+        qs.globals = '1';
     }
     const items = await fetchEntities.call(this, '/api/activities', qs);
-    return mapToOptions(items);
+    return items.map((item: EntityItem) => ({
+        name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
+        value: String(item.id),
+    }));
 }
 
 /**
