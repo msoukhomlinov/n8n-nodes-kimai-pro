@@ -80,7 +80,7 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
         ]);
 
         /* Check if the selected project allows global activities */
-        let allowsGlobals = true;
+        let allowsGlobals = false;
         try {
             const credentials = await this.getCredentials('kimaiProApi');
             const baseURL = credentials.apiUrl as string;
@@ -93,8 +93,8 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
             const project = Array.isArray(projectResponse) ? projectResponse[0] : projectResponse;
             allowsGlobals = project && project.globalActivities !== false;
         } catch {
-            /* If detail lookup fails, include global activities by default */
-            allowsGlobals = true;
+            /* If detail lookup fails, exclude global activities to be safe */
+            allowsGlobals = false;
         }
 
         /* Deduplicate by ID — project activities take priority. */
