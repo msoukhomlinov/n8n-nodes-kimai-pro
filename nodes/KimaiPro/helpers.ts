@@ -5,6 +5,7 @@ interface EntityItem {
     name?: string;
     username?: string;
     alias?: string;
+    globalActivities?: boolean;
     [key: string]: any;
 }
 
@@ -44,10 +45,18 @@ export async function getCustomers(this: ILoadOptionsFunctions): Promise<INodePr
 }
 
 /**
- * Load project options for picklists. Optionally filter by customer.
+ * Load project options for picklists.
+ * Uses visible=1 for timesheet creation, visible=3 for management contexts.
  */
 export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const items = await fetchEntities.call(this, '/api/projects', { visible: '3', ignoreDates: '1' });
+    const operation = this.getCurrentNodeParameter('operation') as string;
+    const resource = this.getCurrentNodeParameter('resource') as string;
+
+    // Use visible=1 for timesheet create/update to hide inactive projects
+    const isTimesheetCreate = resource === 'timesheet' && (operation === 'create' || operation === 'update');
+    const visible = isTimesheetCreate ? '1' : '3';
+
+    const items = await fetchEntities.call(this, '/api/projects', { visible, ignoreDates: '1' });
     return items.map((item: EntityItem) => ({
         name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
         value: String(item.id),
@@ -55,7 +64,9 @@ export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePro
 }
 
 /**
- * Load activity options for picklists. Optionally filter by project.
+ * Load activity options for picklists.
+ * Fetches project-bound and global activities separately, then merges.
+ * Only includes global activities if the selected project permits them.
  */
 export async function getActivities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const projectId = this.getCurrentNodeParameter('project');
@@ -67,9 +78,17 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
             fetchEntities.call(this, '/api/activities', { project: projectId }),
             fetchEntities.call(this, '/api/activities', { globals: '1' }),
         ]);
+
+        /* Check if the selected project allows global activities */
+        const projectDetails = await fetchEntities.call(this, `/api/projects/${projectId}`);
+        const allowsGlobals = projectDetails.length > 0 && projectDetails[0].globalActivities !== false;
+
         /* Deduplicate by ID — project activities take priority. */
         const seen = new Set(projectItems.map((i) => String(i.id)));
-        items = [...projectItems, ...globalItems.filter((i) => !seen.has(String(i.id)))];
+        const filteredGlobals = allowsGlobals 
+            ? globalItems.filter((i) => !seen.has(String(i.id)))
+            : [];
+        items = [...projectItems, ...filteredGlobals];
     } else {
         items = await fetchEntities.call(this, '/api/activities');
     }
@@ -106,4 +125,3 @@ export async function getTeams(this: ILoadOptionsFunctions): Promise<INodeProper
     const items = await fetchEntities.call(this, '/api/teams');
     return mapToOptions(items);
 }
-
