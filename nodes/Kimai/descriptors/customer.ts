@@ -53,7 +53,7 @@ export const customerDescriptor: ResourceDescriptor = {
 						teams: '={{$parameter["customerTeams"] || undefined}}',
 						budget: '={{$parameter["budget"] || undefined}}',
 						timeBudget: '={{$parameter["timeBudget"] || undefined}}',
-						budgetType: '={{$parameter["budgetType"] ?? undefined}}',
+						budgetType: '={{$parameter["budgetType"] || undefined}}',
 						visible: '={{$parameter["visible"] ?? true}}',
 						billable: '={{$parameter["billable"] ?? true}}',
 					},

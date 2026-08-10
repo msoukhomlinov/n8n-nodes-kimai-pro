@@ -35,7 +35,7 @@ export const activityDescriptor: ResourceDescriptor = {
 						invoiceText: '={{$parameter["invoiceText"] || undefined}}',
 						budget: '={{$parameter["budget"] || undefined}}',
 						timeBudget: '={{$parameter["timeBudget"] || undefined}}',
-						budgetType: '={{$parameter["budgetType"] ?? undefined}}',
+						budgetType: '={{$parameter["budgetType"] || undefined}}',
 					},
 				},
 			},
