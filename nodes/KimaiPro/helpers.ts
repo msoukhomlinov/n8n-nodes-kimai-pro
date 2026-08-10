@@ -47,7 +47,7 @@ export async function getCustomers(this: ILoadOptionsFunctions): Promise<INodePr
  * Load project options for picklists. Optionally filter by customer.
  */
 export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const items = await fetchEntities.call(this, '/api/projects', { visible: '3' });
+    const items = await fetchEntities.call(this, '/api/projects', { visible: '3', ignoreDates: '1' });
     return items.map((item: EntityItem) => ({
         name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
         value: String(item.id),
@@ -59,12 +59,21 @@ export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePro
  */
 export async function getActivities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const projectId = this.getCurrentNodeParameter('project');
-    const qs: Record<string, any> = {};
+    let items: EntityItem[];
+
     if (projectId) {
-        qs.project = projectId;
-        qs.globals = '1';
+        /* Fetch project-bound activities and global activities separately, then merge. */
+        const [projectItems, globalItems] = await Promise.all([
+            fetchEntities.call(this, '/api/activities', { project: projectId }),
+            fetchEntities.call(this, '/api/activities', { globals: '1' }),
+        ]);
+        /* Deduplicate by ID — project activities take priority. */
+        const seen = new Set(projectItems.map((i) => String(i.id)));
+        items = [...projectItems, ...globalItems.filter((i) => !seen.has(String(i.id)))];
+    } else {
+        items = await fetchEntities.call(this, '/api/activities');
     }
-    const items = await fetchEntities.call(this, '/api/activities', qs);
+
     return items.map((item: EntityItem) => ({
         name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
         value: String(item.id),
