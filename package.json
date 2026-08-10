@@ -46,7 +46,7 @@
       "dist/credentials/KimaiProApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/KimaiPro/Kimai.node.js"
+      "dist/nodes/KimaiPro/KimaiPro.node.js"
     ]
   },
   "devDependencies": {
