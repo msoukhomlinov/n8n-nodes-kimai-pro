@@ -51,9 +51,9 @@ const descriptors: ResourceDescriptor[] = [
 	defaultDescriptor,
 ];
 
-export class Kimai implements INodeType {
+export class KimaiPro implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Kimai',
+		displayName: 'Kimai Pro',
 		name: 'kimaiPro',
 		icon: 'file:kimai.svg',
 		group: ['organization'],

@@ -5,7 +5,7 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export class KimaiApi implements ICredentialType {
+export class KimaiProApi implements ICredentialType {
 	name = 'kimaiProApi';
 	displayName = 'Kimai API';
 	documentationUrl = 'https://www.kimai.org/documentation/rest-api.html';
