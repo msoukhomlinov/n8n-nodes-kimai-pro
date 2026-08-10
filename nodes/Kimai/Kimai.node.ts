@@ -5,8 +5,8 @@ export class Kimai implements INodeType {
 		displayName: 'Kimai',
 		name: 'kimai',
 		icon: 'file:kimai.svg',
-		group: ['transform'],
-		version: 1,
+		group: ['organization'],
+		version: [1, 1],
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Interact with Kimai time-tracking API',
 		defaults: {
@@ -220,6 +220,20 @@ export class Kimai implements INodeType {
 						},
 					},
 					{
+						name: 'Add Team',
+						value: 'addTeam',
+						action: 'Create default team for activity',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '=/api/activities/{{$parameter["id"]}}/team',
+								body: {
+									team: '={{$parameter["teamId"]}}',
+								},
+							},
+						},
+					},
+					{
 						name: 'Delete Rate',
 						value: 'deleteRate',
 						action: 'Delete rate for activity',
@@ -241,7 +255,7 @@ export class Kimai implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['activity'],
-						operation: ['get', 'update', 'delete', 'updateMeta', 'getRates', 'addRate', 'deleteRate'],
+						operation: ['get', 'update', 'delete', 'updateMeta', 'getRates', 'addRate', 'deleteRate', 'addTeam'],
 					},
 				},
 				default: '',
@@ -588,6 +602,19 @@ export class Kimai implements INodeType {
 				},
 				default: '',
 			},
+			{
+				displayName: 'Team ID',
+				name: 'teamId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['activity'],
+						operation: ['addTeam'],
+					},
+				},
+				default: '',
+			},
 			// Customer Resource
 			{
 				displayName: 'Operation',
@@ -679,6 +706,7 @@ export class Kimai implements INodeType {
 									order: '={{$parameter["order"] || undefined}}',
 									orderBy: '={{$parameter["orderBy"] || undefined}}',
 									term: '={{$parameter["term"] || undefined}}',
+									full: '={{$parameter["full"] || undefined}}',
 								},
 							},
 						},
@@ -771,6 +799,67 @@ export class Kimai implements INodeType {
 						},
 					},
 					{
+						name: 'Get Comments',
+						value: 'getComments',
+						action: 'Get comments for customer',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '=/api/customers/{{$parameter["id"]}}/comments',
+							},
+						},
+					},
+					{
+						name: 'Add Comment',
+						value: 'addComment',
+						action: 'Add comment for customer',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '=/api/customers/{{$parameter["id"]}}/comments',
+								body: {
+									message: '={{$parameter["commentText"]}}',
+								},
+							},
+						},
+					},
+					{
+						name: 'Delete Comment',
+						value: 'deleteComment',
+						action: 'Delete customer comment',
+						routing: {
+							request: {
+								method: 'DELETE',
+								url: '=/api/customers/{{$parameter["id"]}}/comments/{{$parameter["commentId"]}}',
+							},
+						},
+					},
+					{
+						name: 'Pin Comment',
+						value: 'pinComment',
+						action: 'Pin customer comment',
+						routing: {
+							request: {
+								method: 'PATCH',
+								url: '=/api/customers/{{$parameter["id"]}}/comments/{{$parameter["commentId"]}}/pin',
+							},
+						},
+					},
+					{
+						name: 'Add Team',
+						value: 'addTeam',
+						action: 'Create default team for customer',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '=/api/customers/{{$parameter["id"]}}/team',
+								body: {
+									team: '={{$parameter["teamId"]}}',
+								},
+							},
+						},
+					},
+					{
 						name: 'Delete Rate',
 						value: 'deleteRate',
 						action: 'Delete rate for customer',
@@ -792,7 +881,7 @@ export class Kimai implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['customer'],
-						operation: ['get', 'update', 'delete', 'updateMeta', 'getRates', 'addRate', 'deleteRate'],
+						operation: ['get', 'update', 'delete', 'updateMeta', 'getRates', 'addRate', 'deleteRate', 'getComments', 'addComment', 'deleteComment', 'pinComment', 'addTeam'],
 					},
 				},
 				default: '',
@@ -946,6 +1035,23 @@ export class Kimai implements INodeType {
 					},
 				},
 				default: '',
+			},
+			{
+				displayName: 'Full',
+				name: 'full',
+				type: 'options',
+				options: [
+					{ name: 'No', value: '0' },
+					{ name: 'Yes', value: '1' },
+				],
+				description: 'Include full customer data',
+				displayOptions: {
+					show: {
+						resource: ['customer'],
+						operation: ['getAll'],
+					},
+				},
+				default: '0',
 			},
 			{
 				displayName: 'Number',
@@ -1391,6 +1497,45 @@ export class Kimai implements INodeType {
 				},
 				default: '',
 			},
+			{
+				displayName: 'Comment Text',
+				name: 'commentText',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['customer'],
+						operation: ['addComment'],
+					},
+				},
+				default: '',
+			},
+			{
+				displayName: 'Comment ID',
+				name: 'commentId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['customer'],
+						operation: ['deleteComment', 'pinComment'],
+					},
+				},
+				default: '',
+			},
+			{
+				displayName: 'Team ID',
+				name: 'teamId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['customer'],
+						operation: ['addTeam'],
+					},
+				},
+				default: '',
+			},
 			// Project Resource
 			{
 				displayName: 'Operation',
@@ -1465,7 +1610,6 @@ export class Kimai implements INodeType {
 								url: '/api/projects',
 								qs: {
 									customer: '={{$parameter["customer"] || undefined}}',
-									'customers[]': '={{$parameter["customers"] || undefined}}',
 									visible: '={{$parameter["visible"] || undefined}}',
 									start: '={{$parameter["start"] || undefined}}',
 									end: '={{$parameter["end"] || undefined}}',
@@ -1552,6 +1696,67 @@ export class Kimai implements INodeType {
 						},
 					},
 					{
+						name: 'Get Comments',
+						value: 'getComments',
+						action: 'Get comments for project',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '=/api/projects/{{$parameter["id"]}}/comments',
+							},
+						},
+					},
+					{
+						name: 'Add Comment',
+						value: 'addComment',
+						action: 'Add comment for project',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '=/api/projects/{{$parameter["id"]}}/comments',
+								body: {
+									message: '={{$parameter["commentText"]}}',
+								},
+							},
+						},
+					},
+					{
+						name: 'Delete Comment',
+						value: 'deleteComment',
+						action: 'Delete project comment',
+						routing: {
+							request: {
+								method: 'DELETE',
+								url: '=/api/projects/{{$parameter["id"]}}/comments/{{$parameter["commentId"]}}',
+							},
+						},
+					},
+					{
+						name: 'Pin Comment',
+						value: 'pinComment',
+						action: 'Pin project comment',
+						routing: {
+							request: {
+								method: 'PATCH',
+								url: '=/api/projects/{{$parameter["id"]}}/comments/{{$parameter["commentId"]}}/pin',
+							},
+						},
+					},
+					{
+						name: 'Add Team',
+						value: 'addTeam',
+						action: 'Create default team for project',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '=/api/projects/{{$parameter["id"]}}/team',
+								body: {
+									team: '={{$parameter["teamId"]}}',
+								},
+							},
+						},
+					},
+					{
 						name: 'Delete Rate',
 						value: 'deleteRate',
 						action: 'Delete rate for project',
@@ -1573,7 +1778,7 @@ export class Kimai implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['project'],
-						operation: ['get', 'update', 'delete', 'updateMeta', 'getRates', 'addRate', 'deleteRate'],
+						operation: ['get', 'update', 'delete', 'updateMeta', 'getRates', 'addRate', 'deleteRate', 'getComments', 'addComment', 'deleteComment', 'pinComment', 'addTeam'],
 					},
 				},
 				default: '',
@@ -1989,6 +2194,45 @@ export class Kimai implements INodeType {
 					show: {
 						resource: ['project'],
 						operation: ['deleteRate'],
+					},
+				},
+				default: '',
+			},
+			{
+				displayName: 'Comment Text',
+				name: 'commentText',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['project'],
+						operation: ['addComment'],
+					},
+				},
+				default: '',
+			},
+			{
+				displayName: 'Comment ID',
+				name: 'commentId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['project'],
+						operation: ['deleteComment', 'pinComment'],
+					},
+				},
+				default: '',
+			},
+			{
+				displayName: 'Team ID',
+				name: 'teamId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['project'],
+						operation: ['addTeam'],
 					},
 				},
 				default: '',
@@ -3550,6 +3794,29 @@ export class Kimai implements INodeType {
 							},
 						},
 					},
+					{
+						name: 'Update Custom Fields',
+						value: 'updateCustomFields',
+						action: 'Update invoice custom fields',
+						routing: {
+							request: {
+								method: 'PATCH',
+								url: '=/api/invoices/{{$parameter["id"]}}/custom-fields',
+								body: '={{$parameter["customFields"]}}',
+							},
+						},
+					},
+					{
+						name: 'Download',
+						value: 'download',
+						action: 'Download invoice',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '=/api/invoices/{{$parameter["id"]}}/download',
+							},
+						},
+					},
 				],
 				default: 'getAll',
 			},
@@ -3561,7 +3828,7 @@ export class Kimai implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['invoice'],
-						operation: ['get'],
+						operation: ['get', 'updateCustomFields', 'download'],
 					},
 				},
 				default: '',
@@ -3654,6 +3921,20 @@ export class Kimai implements INodeType {
 				},
 				default: 50,
 			},
+			{
+				displayName: 'Custom Fields',
+				name: 'customFields',
+				type: 'json',
+				required: true,
+				description: 'Array of {name, value} objects for invoice custom fields',
+				displayOptions: {
+					show: {
+						resource: ['invoice'],
+						operation: ['updateCustomFields'],
+					},
+				},
+				default: '[]',
+			},
 			// Default Resource
 			{
 				displayName: 'Operation',
@@ -3721,8 +4002,93 @@ export class Kimai implements INodeType {
 							},
 						},
 					},
+					{
+						name: 'Get Next Week',
+						value: 'getNextWeek',
+						action: 'Get next week approval bundle',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '/api/approval-bundle/next-week',
+							},
+						},
+					},
+					{
+						name: 'Get Overtime Year',
+						value: 'getOvertimeYear',
+						action: 'Get overtime year',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '/api/approval-bundle/overtime_year',
+							},
+						},
+					},
+					{
+						name: 'Get Week Status',
+						value: 'getWeekStatus',
+						action: 'Get week status',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '/api/approval-bundle/week-status',
+							},
+						},
+					},
+					{
+						name: 'Get Weekly Overtime',
+						value: 'getWeeklyOvertime',
+						action: 'Get weekly overtime',
+						routing: {
+							request: {
+								method: 'GET',
+								url: '/api/approval-bundle/weekly_overtime',
+							},
+						},
+					},
+					{
+						name: 'Add to Approve',
+						value: 'addToApprove',
+						action: 'Add timesheet to approve',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/approval-bundle/add_to_approve',
+								qs: {
+									user: '={{$parameter["userId"] || undefined}}',
+									date: '={{$parameter["date"] || undefined}}',
+								},
+							},
+						},
+					},
 				],
 				default: 'ping',
+			},
+			{
+				displayName: 'User ID',
+				name: 'userId',
+				type: 'string',
+				description: 'User ID to get approval data for',
+				displayOptions: {
+					show: {
+						resource: ['default'],
+						operation: ['addToApprove', 'getNextWeek', 'getOvertimeYear', 'getWeekStatus', 'getWeeklyOvertime'],
+					},
+				},
+				default: '',
+			},
+			{
+				displayName: 'Date',
+				name: 'date',
+				type: 'dateTime',
+				description: 'Date for approval data (YYYY-MM-DD)',
+				displayOptions: {
+					show: {
+						resource: ['default'],
+						operation: ['addToApprove', 'getOvertimeYear', 'getWeekStatus', 'getWeeklyOvertime'],
+					},
+				},
+				default: '',
 			},
 		],
 	};
