@@ -3,25 +3,54 @@
 [![npm version](https://img.shields.io/npm/v/n8n-nodes-kimai.svg)](https://www.npmjs.com/package/n8n-nodes-kimai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-An n8n community node for integrating with [Kimai](https://www.kimai.org/) time-tracking software. This node provides comprehensive access to the Kimai REST API, allowing you to automate time tracking, manage projects, customers, activities, teams, and more.
+An n8n community node for integrating with [Kimai](https://www.kimai.org/) time-tracking software. This node provides comprehensive access to the Kimai REST API, allowing you to automate time tracking, manage projects, customers, activities, teams, invoices, and more.
 
 ## Features
 
-- **Complete API Coverage**: Supports all public Kimai API endpoints
-- **Resource Management**: 
-  - Activities (CRUD, rates, meta fields)
-  - Customers (CRUD, rates, meta fields)
-  - Projects (CRUD, rates, meta fields)
+- **Modular Architecture**: Refactored from a monolithic implementation into 12 focused descriptor files, making the codebase easier to maintain, extend, and review
+- **Complete API Coverage**: Supports 87 operations across 9 resources — all public Kimai API endpoints
+- **Resource Management**:
+  - Activities (CRUD, rates, meta fields, team assignment)
+  - Customers (CRUD, rates, meta fields, comments, team assignment)
+  - Projects (CRUD, rates, meta fields, comments, team assignment)
   - Tags (Create, Get, Delete)
   - Teams (CRUD, member management, access control)
   - Timesheets (CRUD, stop/restart/duplicate/export, meta fields, recent/active queries)
   - Users (CRUD, preferences, API token management)
-  - Invoices (Read-only operations)
+  - Invoices (Read, custom fields, download)
+  - Approval (Week status, overtime tracking, approval submission)
   - System (Config, colors, ping, version, plugins)
 - **Declarative Style**: Uses n8n's declarative routing for clean, maintainable code
 - **Full Query Support**: Filtering, sorting, pagination, and search capabilities
 - **Array Parameters**: Support for array query parameters (projects[], customers[], etc.)
 - **API Version**: Compatible with Kimai API v1.1
+
+## Architecture
+
+The node uses a modular descriptor-based architecture. Each Kimai resource (Activity, Customer, Project, etc.) is defined in its own TypeScript file under `nodes/Kimai/descriptors/`. This structure:
+
+- **Separates concerns**: Each resource has its own file for operations, parameters, and routing
+- **Simplifies maintenance**: Changes to one resource don't affect others
+- **Enables collaboration**: Multiple contributors can work on different resources simultaneously
+- **Improves readability**: Clear, focused files are easier to review and understand
+
+```
+nodes/Kimai/
+├── Kimai.node.ts              # Main node (orchestrates descriptors)
+├── descriptors/
+│   ├── activity.ts            # Activity operations (10)
+│   ├── customer.ts            # Customer operations (14)
+│   ├── project.ts             # Project operations (14)
+│   ├── tag.ts                 # Tag operations (3)
+│   ├── team.ts                # Team operations (13)
+│   ├── timesheet.ts           # Timesheet operations (12)
+│   ├── user.ts                # User operations (7)
+│   ├── invoice.ts             # Invoice operations (4)
+│   ├── default.ts             # System/approval operations (10)
+│   ├── common.ts              # Shared parameter builders
+│   ├── types.ts               # TypeScript type definitions
+│   └── index.ts               # Descriptor exports
+```
 
 ## Installation
 
@@ -43,10 +72,6 @@ npm install n8n-nodes-kimai
 
 Restart n8n to load the node.
 
-### Docker Installation
-
-See [README.DOCKER.md](README.DOCKER.md) for Docker-based development setup.
-
 ## Credentials Setup
 
 1. In n8n, go to **Credentials** → **Add Credential**
@@ -64,7 +89,7 @@ See [README.DOCKER.md](README.DOCKER.md) for Docker-based development setup.
 
 ## Resources and Operations
 
-### Activity
+### Activity (10 operations)
 
 - **Create**: Create a new activity
 - **Get**: Get a specific activity by ID
@@ -75,8 +100,9 @@ See [README.DOCKER.md](README.DOCKER.md) for Docker-based development setup.
 - **Get Rates**: Get rates for an activity
 - **Add Rate**: Add a rate for an activity
 - **Delete Rate**: Delete a rate for an activity
+- **Add Team**: Assign a team to an activity
 
-### Customer
+### Customer (14 operations)
 
 - **Create**: Create a new customer
 - **Get**: Get a specific customer by ID
@@ -87,8 +113,13 @@ See [README.DOCKER.md](README.DOCKER.md) for Docker-based development setup.
 - **Get Rates**: Get rates for a customer
 - **Add Rate**: Add a rate for a customer
 - **Delete Rate**: Delete a rate for a customer
+- **Get Comments**: Get comments for a customer
+- **Add Comment**: Add a comment to a customer
+- **Delete Comment**: Delete a comment from a customer
+- **Toggle Pin Comment**: Pin/unpin a customer comment
+- **Add Team**: Assign a team to a customer
 
-### Project
+### Project (14 operations)
 
 - **Create**: Create a new project
 - **Get**: Get a specific project by ID
@@ -99,14 +130,19 @@ See [README.DOCKER.md](README.DOCKER.md) for Docker-based development setup.
 - **Get Rates**: Get rates for a project
 - **Add Rate**: Add a rate for a project
 - **Delete Rate**: Delete a rate for a project
+- **Get Comments**: Get comments for a project
+- **Add Comment**: Add a comment to a project
+- **Delete Comment**: Delete a comment from a project
+- **Toggle Pin Comment**: Pin/unpin a project comment
+- **Add Team**: Assign a team to a project
 
-### Tag
+### Tag (3 operations)
 
 - **Create**: Create a new tag
 - **Get All**: List all tags (with optional name filter)
 - **Delete**: Delete a tag by ID
 
-### Team
+### Team (13 operations)
 
 - **Create**: Create a new team
 - **Get**: Get a specific team by ID
@@ -122,7 +158,7 @@ See [README.DOCKER.md](README.DOCKER.md) for Docker-based development setup.
 - **Grant Activity Access**: Grant team access to an activity
 - **Revoke Activity Access**: Revoke activity access from a team
 
-### Timesheet
+### Timesheet (12 operations)
 
 - **Create**: Create a new timesheet entry
 - **Get**: Get a specific timesheet by ID
@@ -137,7 +173,7 @@ See [README.DOCKER.md](README.DOCKER.md) for Docker-based development setup.
 - **Get Recent**: Get recent user activities
 - **Get Active**: Get active timesheets for current user
 
-### User
+### User (7 operations)
 
 - **Create**: Create a new user
 - **Get**: Get a specific user by ID
@@ -147,18 +183,25 @@ See [README.DOCKER.md](README.DOCKER.md) for Docker-based development setup.
 - **Update Preferences**: Update user preferences
 - **Delete API Token**: Delete an API token
 
-### Invoice
+### Invoice (4 operations)
 
 - **Get**: Get a specific invoice by ID
 - **Get All**: List all invoices with filtering options
+- **Update Custom Fields**: Update invoice custom fields
+- **Download**: Download an invoice file
 
-### Default
+### Default / System (10 operations)
 
 - **Get Timesheet Config**: Get timesheet configuration
 - **Get Colors**: Get configured color codes
 - **Ping**: Test API connection
 - **Get Version**: Get Kimai version information
 - **Get Plugins**: Get installed plugins list
+- **Get Next Week**: Get next week number
+- **Get Overtime Year**: Get overtime year configuration
+- **Get Week Status**: Get approval status for a week
+- **Get Weekly Overtime**: Get overtime for a week
+- **Add to Approve**: Submit timesheets for approval
 
 ## Usage Examples
 
@@ -258,7 +301,6 @@ The node will return error responses from the Kimai API. Common errors:
 
 - Node.js (v18.10.0 or higher)
 - npm
-- Docker and Docker Compose (for testing)
 
 ### Setup Development Environment
 
@@ -278,17 +320,11 @@ The node will return error responses from the Kimai API. Common errors:
    npm run build
    ```
 
-4. Start the development environment:
+4. Link to your n8n installation:
    ```bash
-   bash scripts/setup.sh
+   cd ~/.n8n/nodes
+   ln -s /path/to/n8n-nodes-kimai n8n-nodes-kimai
    ```
-   Or manually with Docker Compose:
-   ```bash
-   docker-compose up -d
-   ```
-
-5. Access n8n at http://localhost:5678
-   - Default credentials are configured in your docker-compose.yml
 
 ### Watch Mode
 
@@ -305,32 +341,40 @@ npm run dev
    npm run build
    ```
 
-2. Start the test environment:
-   ```bash
-   bash scripts/setup.sh
-   ```
-
+2. Link to your n8n installation and restart n8n
 3. In n8n, add the Kimai node to a workflow and test the operations
 
 ### Project Structure
 
 ```
-n8n-kimai/
+n8n-nodes-kimai/
 ├── credentials/
 │   └── KimaiApi.credentials.ts    # API credentials configuration
 ├── nodes/
 │   └── Kimai/
-│       └── Kimai.node.ts          # Main node implementation
-├── icons/
-│   └── kimai.svg                  # Node icon
+│       ├── Kimai.node.ts          # Main node (orchestrates descriptors)
+│       ├── kimai.svg              # Node icon
+│       └── descriptors/           # Modular resource descriptors
+│           ├── activity.ts        # Activity operations
+│           ├── customer.ts        # Customer operations
+│           ├── project.ts         # Project operations
+│           ├── tag.ts             # Tag operations
+│           ├── team.ts            # Team operations
+│           ├── timesheet.ts       # Timesheet operations
+│           ├── user.ts            # User operations
+│           ├── invoice.ts         # Invoice operations
+│           ├── default.ts         # System/approval operations
+│           ├── common.ts          # Shared parameter builders
+│           ├── types.ts           # TypeScript type definitions
+│           └── index.ts           # Descriptor exports
 ├── scripts/
 │   ├── build.sh                   # Build script
 │   ├── setup.sh                   # Development setup
 │   └── rebuild.sh                 # Rebuild helper
-├── docker-compose.yml             # Docker setup for local testing
 ├── package.json                   # Package configuration
 ├── tsconfig.json                  # TypeScript configuration
-└── README.md                      # This file
+├── README.md                      # This file
+└── CHANGELOG.md                   # Version history
 ```
 
 ### Available npm Scripts
@@ -341,44 +385,22 @@ n8n-kimai/
 - `npm run lint`: Lint code with ESLint
 - `npm run lintfix`: Auto-fix linting issues
 
-### Docker Environment
-
-The project includes a Docker Compose setup for easy local testing:
-
-- **n8n**: The workflow automation platform (port 5678)
-- **postgres**: PostgreSQL database for n8n (optional, for production-like setup)
-
-To start:
-
-```bash
-docker-compose up -d
-```
-
-To stop:
-
-```bash
-docker-compose down
-```
-
-To view logs:
-
-```bash
-docker-compose logs -f n8n
-```
-
 ### API Coverage
 
 This node implements all major Kimai API endpoints:
 
-✅ Activities (CRUD + rates + meta fields)  
-✅ Customers (CRUD + rates + meta fields)  
-✅ Projects (CRUD + rates + meta fields)  
-✅ Tags (CRUD operations)  
+✅ Activities (CRUD + rates + meta fields + team assignment)  
+✅ Customers (CRUD + rates + meta fields + comments + team assignment)  
+✅ Projects (CRUD + rates + meta fields + comments + team assignment)  
+✅ Tags (Create, Get All, Delete)  
 ✅ Teams (CRUD + member management + access control)  
 ✅ Timesheets (CRUD + stop/restart/duplicate/export + meta fields)  
 ✅ Users (CRUD + preferences + API token management)  
-✅ Invoices (Read operations)  
-✅ System (Config, colors, ping, version, plugins)
+✅ Invoices (Read + custom fields + download)  
+✅ Approval (Week status, overtime, approval submission)  
+✅ System (Config, colors, ping, version, plugins)  
+
+**Total: 87 operations across 9 resources.**
 
 Based on the official Kimai REST API.
 
@@ -405,8 +427,8 @@ This project uses GitHub Actions to automatically publish to npm when a new rele
 3. **Commit and push** changes
 4. **Create a tag**:
    ```bash
-   git tag -a v1.0.1 -m "Release v1.0.1"
-   git push origin v1.0.1
+   git tag -a v1.2.0 -m "Release v1.2.0"
+   git push origin v1.2.0
    ```
 5. **Create GitHub Release** - Publishing to npm happens automatically
 
@@ -460,4 +482,3 @@ We build tools like this n8n-kimai node to help businesses automate their time t
 ---
 
 **Note**: This is a community-created node and is not officially maintained by n8n GmbH or the Kimai project.
-

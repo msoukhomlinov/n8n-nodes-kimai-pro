@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-08-10
+
+### Added
+- **18 new API endpoints** across 5 resources:
+  - **Customer**: Get Comments, Add Comment, Delete Comment, Toggle Pin Comment
+  - **Project**: Get Comments, Add Comment, Delete Comment, Toggle Pin Comment
+  - **Invoice**: Update Custom Fields, Download
+  - **Approval**: Get Next Week, Get Overtime Year, Get Week Status, Get Weekly Overtime, Add to Approve
+  - **Activity**: Add Team
+  - **Customer**: Add Team
+  - **Project**: Add Team
+- **Modular descriptor architecture**: Refactored from a single 4113-line file into 12 focused descriptor files under `nodes/Kimai/descriptors/`
+- **Node version 2**: Added support for n8n-workflow API version 2 alongside version 1
+
+### Changed
+- **Architecture**: Moved from monolithic `Kimai.node.ts` to a modular descriptor-based structure
+  - Each resource now has its own file (activity.ts, customer.ts, project.ts, etc.)
+  - Shared utilities extracted to `common.ts`
+  - Type definitions centralized in `types.ts`
+  - Main node file reduced from 4113 lines to 131 lines
+- **Total operations**: Increased from 69 to 87 operations across 9 resources
+
+### Fixed
+- Query parameter handling for optional values (empty strings no longer sent to API)
+- Array parameter filtering for list endpoints
+- PATCH request body handling for budget fields (preserves zero values)
+- All codex feedback items addressed
+
 ## [1.1.0] - 2026-08-09
 
 ### Changed
@@ -24,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PATCH requests use `?? undefined` for budget to preserve zero values
 - Array query routes (`projects[]`, `customers[]`, `activities[]`, `users[]`, `tags[]`) filter empty strings
 - Global Activities filter preserves `false` value
+
 ## [1.0.3] - 2024-12-02
 
 ### Added
@@ -95,8 +124,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ES2020 target
 - CommonJS module format
 
+[1.2.0]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.2.0
+[1.1.0]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.1.0
 [1.0.3]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.0.3
 [1.0.2]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.0.2
 [1.0.1]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.0.1
 [1.0.0]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.0.0
-
