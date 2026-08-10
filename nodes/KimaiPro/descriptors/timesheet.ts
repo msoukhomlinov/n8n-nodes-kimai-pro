@@ -28,7 +28,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 						fixedRate: '={{$parameter["fixedRate"] || undefined}}',
 						hourlyRate: '={{$parameter["hourlyRate"] || undefined}}',
 						user: '={{$parameter["user"] || undefined}}',
-						tags: '={{Object.keys($parameter["tags"]) || undefined}}',
+						tags: '={{Object.values($parameter["tags"]) || undefined}}',
 						exported: '={{$parameter["exported"] || undefined}}',
 						billable: '={{$parameter["billable"] ?? true}}',
 					},
@@ -103,7 +103,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 						fixedRate: '={{$parameter["fixedRate"] || undefined}}',
 						hourlyRate: '={{$parameter["hourlyRate"] || undefined}}',
 						user: '={{$parameter["user"] || undefined}}',
-						tags: '={{Object.keys($parameter["tags"]) || undefined}}',
+						tags: '={{Object.values($parameter["tags"]) || undefined}}',
 						exported: '={{$parameter["exported"] || undefined}}',
 						billable: '={{$parameter["billable"] ?? undefined}}',
 					},
@@ -482,6 +482,13 @@ export const timesheetDescriptor: ResourceDescriptor = {
 				},
 			},
 			default: {},
+			routing: {
+				send: {
+					type: 'query',
+					property: 'tags[]',
+					value: '={{Object.values($parameter["tags"])}}',
+				},
+			},
 		},
 		{
 			displayName: 'Order By',

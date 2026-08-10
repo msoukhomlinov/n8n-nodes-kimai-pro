@@ -17,10 +17,15 @@ function mapToOptions(items: EntityItem[]): INodePropertyOptions[] {
 
 async function fetchEntities(this: ILoadOptionsFunctions, url: string, qs?: Record<string, any>): Promise<EntityItem[]> {
     try {
+        const credentials = await this.getCredentials('kimaiProApi');
+        const baseURL = credentials.apiUrl as string;
         const response = await this.helpers.httpRequest({
             method: 'GET',
-            url,
+            url: `${baseURL}${url}`,
             qs: qs || {},
+            headers: {
+                Accept: 'application/json',
+            },
         });
         const items = Array.isArray(response) ? response : (response.data || response.entities || []);
         return Array.isArray(items) ? items : [];
@@ -67,11 +72,14 @@ export async function getUsers(this: ILoadOptionsFunctions): Promise<INodeProper
 }
 
 /**
- * Load tag options for picklists
+ * Load tag options for picklists. Tags API uses names, not IDs.
  */
 export async function getTags(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const items = await fetchEntities.call(this, '/api/tags/find');
-    return mapToOptions(items);
+    return items.map((item) => ({
+        name: item.name || String(item.id),
+        value: item.name || String(item.id),
+    }));
 }
 
 /**
