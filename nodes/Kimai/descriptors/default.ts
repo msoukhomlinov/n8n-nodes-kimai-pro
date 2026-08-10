@@ -146,7 +146,13 @@ export const defaultDescriptor: ResourceDescriptor = {
 			displayOptions: {
 				show: {
 					resource: [resource],
-					operation: ['addToApprove', 'getNextWeek', 'getOvertimeYear', 'getWeekStatus', 'getWeeklyOvertime'],
+					operation: [
+						'addToApprove',
+						'getNextWeek',
+						'getOvertimeYear',
+						'getWeekStatus',
+						'getWeeklyOvertime',
+					],
 				},
 			},
 			default: '',

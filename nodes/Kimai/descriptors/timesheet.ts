@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 import type { ResourceDescriptor } from './types';
-import {
-	createIdParameter,
-	createMetaParameters,
-} from './common';
+import { createIdParameter, createMetaParameters } from './common';
 
 const resource = 'timesheet';
 
@@ -204,7 +201,16 @@ export const timesheetDescriptor: ResourceDescriptor = {
 		},
 	],
 	parameters: [
-		createIdParameter('Timesheet ID', resource, ['get', 'update', 'delete', 'stop', 'restart', 'duplicate', 'toggleExport', 'updateMeta']),
+		createIdParameter('Timesheet ID', resource, [
+			'get',
+			'update',
+			'delete',
+			'stop',
+			'restart',
+			'duplicate',
+			'toggleExport',
+			'updateMeta',
+		]),
 		{
 			displayName: 'Project ID',
 			name: 'project',

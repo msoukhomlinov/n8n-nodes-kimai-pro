@@ -200,9 +200,9 @@ export const projectDescriptor: ResourceDescriptor = {
 			},
 		},
 		{
-			name: 'Pin Comment',
-			value: 'pinComment',
-			action: 'Pin project comment',
+			name: 'Toggle Pin Comment',
+			value: 'togglePin',
+			action: 'Toggle comment pin state',
 			routing: {
 				request: {
 					method: 'PATCH',
@@ -234,7 +234,20 @@ export const projectDescriptor: ResourceDescriptor = {
 		},
 	],
 	parameters: [
-		createIdParameter('Project ID', resource, ['get', 'update', 'delete', 'updateMeta', 'getRates', 'addRate', 'deleteRate', 'getComments', 'addComment', 'deleteComment', 'pinComment', 'addTeam']),
+		createIdParameter('Project ID', resource, [
+			'get',
+			'update',
+			'delete',
+			'updateMeta',
+			'getRates',
+			'addRate',
+			'deleteRate',
+			'getComments',
+			'addComment',
+			'deleteComment',
+			'togglePin',
+			'addTeam',
+		]),
 		{
 			displayName: 'Name',
 			name: 'name',
@@ -523,7 +536,7 @@ export const projectDescriptor: ResourceDescriptor = {
 		...createMetaParameters(resource, ['updateMeta']),
 		...createRateParameters(resource, ['addRate']),
 		createRateIdParameter(resource, ['deleteRate']),
-		...createCommentParameters(resource, ['addComment'], ['deleteComment', 'pinComment']),
+		...createCommentParameters(resource, ['addComment'], ['deleteComment', 'togglePin']),
 		createTeamIdParameter(resource, ['addTeam']),
 	],
 };

@@ -1,7 +1,4 @@
-import type {
-	INodePropertyOptions,
-	INodeProperties,
-} from 'n8n-workflow';
+import type { INodePropertyOptions, INodeProperties } from 'n8n-workflow';
 
 export interface OperationDefinition {
 	name: string;

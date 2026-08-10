@@ -173,7 +173,16 @@ export const activityDescriptor: ResourceDescriptor = {
 		},
 	],
 	parameters: [
-		createIdParameter('Activity ID', resource, ['get', 'update', 'delete', 'updateMeta', 'getRates', 'addRate', 'deleteRate', 'addTeam']),
+		createIdParameter('Activity ID', resource, [
+			'get',
+			'update',
+			'delete',
+			'updateMeta',
+			'getRates',
+			'addRate',
+			'deleteRate',
+			'addTeam',
+		]),
 		{
 			displayName: 'Name',
 			name: 'name',

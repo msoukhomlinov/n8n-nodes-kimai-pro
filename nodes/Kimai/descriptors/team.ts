@@ -163,7 +163,19 @@ export const teamDescriptor: ResourceDescriptor = {
 		},
 	],
 	parameters: [
-		createIdParameter('Team ID', resource, ['get', 'update', 'delete', 'addMember', 'removeMember', 'grantCustomer', 'revokeCustomer', 'grantProject', 'revokeProject', 'grantActivity', 'revokeActivity']),
+		createIdParameter('Team ID', resource, [
+			'get',
+			'update',
+			'delete',
+			'addMember',
+			'removeMember',
+			'grantCustomer',
+			'revokeCustomer',
+			'grantProject',
+			'revokeProject',
+			'grantActivity',
+			'revokeActivity',
+		]),
 		{
 			displayName: 'Name',
 			name: 'name',

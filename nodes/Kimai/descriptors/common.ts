@@ -138,10 +138,7 @@ export function createCommonQueryParams(
 /**
  * Creates budget-related parameters
  */
-export function createBudgetParameters(
-	resource: string,
-	operations: string[],
-): INodeProperties[] {
+export function createBudgetParameters(resource: string, operations: string[]): INodeProperties[] {
 	return [
 		{
 			displayName: 'Budget',
@@ -192,10 +189,7 @@ export function createBudgetParameters(
 /**
  * Creates rate-related parameters for addRate operations
  */
-export function createRateParameters(
-	resource: string,
-	operations: string[],
-): INodeProperties[] {
+export function createRateParameters(resource: string, operations: string[]): INodeProperties[] {
 	return [
 		{
 			displayName: 'Rate',
@@ -252,10 +246,7 @@ export function createRateParameters(
 /**
  * Creates rate ID parameter for deleteRate operations
  */
-export function createRateIdParameter(
-	resource: string,
-	operations: string[],
-): INodeProperties {
+export function createRateIdParameter(resource: string, operations: string[]): INodeProperties {
 	return {
 		displayName: 'Rate ID',
 		name: 'rateId',
@@ -274,10 +265,7 @@ export function createRateIdParameter(
 /**
  * Creates meta field parameters for updateMeta operations
  */
-export function createMetaParameters(
-	resource: string,
-	operations: string[],
-): INodeProperties[] {
+export function createMetaParameters(resource: string, operations: string[]): INodeProperties[] {
 	return [
 		{
 			displayName: 'Meta Field Name',
@@ -349,10 +337,7 @@ export function createCommentParameters(
 /**
  * Creates team ID parameter
  */
-export function createTeamIdParameter(
-	resource: string,
-	operations: string[],
-): INodeProperties {
+export function createTeamIdParameter(resource: string, operations: string[]): INodeProperties {
 	return {
 		displayName: 'Team ID',
 		name: 'teamId',

@@ -36,10 +36,7 @@ function buildOperationProperty(descriptor: ResourceDescriptor): INodeProperties
 }
 
 function buildProperties(descriptor: ResourceDescriptor): INodeProperties[] {
-	return [
-		buildOperationProperty(descriptor),
-		...descriptor.parameters,
-	];
+	return [buildOperationProperty(descriptor), ...descriptor.parameters];
 }
 
 const descriptors: ResourceDescriptor[] = [
@@ -60,7 +57,8 @@ export class Kimai implements INodeType {
 		name: 'kimai',
 		icon: 'file:kimai.svg',
 		group: ['organization'],
-		version: [1, 1],
+		version: [1, 2],
+
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Interact with Kimai time-tracking API',
 		defaults: {
