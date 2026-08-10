@@ -39,7 +39,7 @@ async function fetchEntities(this: ILoadOptionsFunctions, url: string, qs?: Reco
  * Load customer options for picklists
  */
 export async function getCustomers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const items = await fetchEntities.call(this, '/api/customers');
+    const items = await fetchEntities.call(this, '/api/customers', { visible: '3' });
     return mapToOptions(items);
 }
 
@@ -47,7 +47,7 @@ export async function getCustomers(this: ILoadOptionsFunctions): Promise<INodePr
  * Load project options for picklists. Optionally filter by customer.
  */
 export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const items = await fetchEntities.call(this, '/api/projects');
+    const items = await fetchEntities.call(this, '/api/projects', { visible: '3' });
     return items.map((item: EntityItem) => ({
         name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
         value: String(item.id),
@@ -75,7 +75,7 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
  * Load user options for picklists
  */
 export async function getUsers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const items = await fetchEntities.call(this, '/api/users');
+    const items = await fetchEntities.call(this, '/api/users', { visible: '3' });
     return mapToOptions(items);
 }
 
