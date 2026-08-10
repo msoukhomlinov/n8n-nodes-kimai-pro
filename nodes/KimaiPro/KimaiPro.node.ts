@@ -1,4 +1,4 @@
-import { INodeType, INodeTypeDescription, INodeProperties } from 'n8n-workflow';
+import { INodeType, INodeTypeDescription, INodeProperties, ILoadOptionsFunctions, INodePropertyOptions } from 'n8n-workflow';
 import type { ResourceDescriptor, OperationDefinition } from './descriptors/types';
 import {
 	activityDescriptor,
@@ -11,6 +11,14 @@ import {
 	invoiceDescriptor,
 	defaultDescriptor,
 } from './descriptors';
+import {
+	getCustomers,
+	getProjects,
+	getActivities,
+	getUsers,
+	getTags,
+	getTeams,
+	} from './helpers';
 
 function buildOperationProperty(descriptor: ResourceDescriptor): INodeProperties {
 	const options: Array<any> = descriptor.operations.map((op: OperationDefinition) => ({
@@ -57,7 +65,7 @@ export class KimaiPro implements INodeType {
 		name: 'kimaiPro',
 		icon: 'file:kimai.svg',
 		group: ['organization'],
-		version: [1, 2],
+		version: [1, 3],
 
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Interact with Kimai time-tracking API',
@@ -127,5 +135,31 @@ export class KimaiPro implements INodeType {
 			},
 			...descriptors.flatMap(buildProperties),
 		],
+		__loadOptionsMethods: ['getCustomers', 'getProjects', 'getActivities', 'getUsers', 'getTags', 'getTeams', ],
 	};
+
+	async getCustomers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+		return getCustomers.call(this);
+	}
+
+	async getProjects(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+		return getProjects.call(this);
+	}
+
+	async getActivities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+		return getActivities.call(this);
+	}
+
+	async getUsers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+		return getUsers.call(this);
+	}
+
+	async getTags(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+		return getTags.call(this);
+	}
+
+	async getTeams(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+		return getTeams.call(this);
+	}
+
 }

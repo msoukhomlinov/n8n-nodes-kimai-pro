@@ -199,7 +199,10 @@ export const activityDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Project ID',
 			name: 'project',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getProjects',
+			},
 			displayOptions: {
 				show: {
 					resource: [resource],
