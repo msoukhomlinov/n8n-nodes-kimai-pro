@@ -43,7 +43,7 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/KimaiApi.credentials.js"
+      "dist/credentials/KimaiProApi.credentials.js"
     ],
     "nodes": [
       "dist/nodes/Kimai/Kimai.node.js"

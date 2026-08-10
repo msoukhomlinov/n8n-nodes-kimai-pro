@@ -8,7 +8,7 @@ An n8n community node for integrating with [Kimai](https://www.kimai.org/) time-
 ## Features
 
 - **Modular Architecture**: Refactored from a monolithic implementation into 12 focused descriptor files, making the codebase easier to maintain, extend, and review
-- **Complete API Coverage**: Supports 87 operations across 9 resources — all public Kimai API endpoints
+- **Complete API Coverage**: Supports 87 operations across 9 resources — all public Kimai Pro API endpoints
 - **Resource Management**:
   - Activities (CRUD, rates, meta fields, team assignment)
   - Customers (CRUD, rates, meta fields, comments, team assignment)
@@ -23,7 +23,7 @@ An n8n community node for integrating with [Kimai](https://www.kimai.org/) time-
 - **Declarative Style**: Uses n8n's declarative routing for clean, maintainable code
 - **Full Query Support**: Filtering, sorting, pagination, and search capabilities
 - **Array Parameters**: Support for array query parameters (projects[], customers[], etc.)
-- **API Version**: Compatible with Kimai API v1.1
+- **API Version**: Compatible with Kimai Pro API v1.1
 
 ## Architecture
 
@@ -75,10 +75,10 @@ Restart n8n to load the node.
 ## Credentials Setup
 
 1. In n8n, go to **Credentials** → **Add Credential**
-2. Search for **Kimai API**
+2. Search for **Kimai Pro API**
 3. Configure:
    - **API URL**: Base URL of your Kimai instance (e.g., `https://kimai.example.com`)
-   - **API Token**: Your Kimai API token (Bearer token)
+   - **API Token**: Your Kimai Pro API token (Bearer token)
 
 ### Getting Your API Token
 
@@ -277,7 +277,7 @@ All operations return JSON responses. The node automatically handles:
 
 ## Error Handling
 
-The node will return error responses from the Kimai API. Common errors:
+The node will return error responses from the Kimai Pro API. Common errors:
 - **401**: Invalid or missing API token
 - **403**: Insufficient permissions
 - **404**: Resource not found
@@ -287,12 +287,12 @@ The node will return error responses from the Kimai API. Common errors:
 
 - Minimum n8n version: 0.180.0
 - Tested against n8n version: 1.0.0+
-- Kimai API: Compatible with Kimai v2.0+
+- Kimai Pro API: Compatible with Kimai v2.0+
 
 ## Resources
 
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
-- [Kimai API documentation](https://www.kimai.org/documentation/rest-api.html)
+- [Kimai Pro API documentation](https://www.kimai.org/documentation/rest-api.html)
 - [Kimai website](https://www.kimai.org/)
 
 ## Development
@@ -387,7 +387,7 @@ n8n-nodes-kimai-pro/
 
 ### API Coverage
 
-This node implements all major Kimai API endpoints:
+This node implements all major Kimai Pro API endpoints:
 
 ✅ Activities (CRUD + rates + meta fields + team assignment)  
 ✅ Customers (CRUD + rates + meta fields + comments + team assignment)  

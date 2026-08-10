@@ -54,7 +54,7 @@ const descriptors: ResourceDescriptor[] = [
 export class Kimai implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Kimai',
-		name: 'kimai',
+		name: 'kimaiPro',
 		icon: 'file:kimai.svg',
 		group: ['organization'],
 		version: [1, 2],
@@ -68,7 +68,7 @@ export class Kimai implements INodeType {
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'kimaiApi',
+				name: 'kimaiProApi',
 				required: true,
 			},
 		],
