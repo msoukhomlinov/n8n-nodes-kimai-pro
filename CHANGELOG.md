@@ -92,7 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-12-02
 
 ### Added
-- Initial release of n8n-nodes-kimai
+- Initial release of n8n-nodes-kimai-pro
 - Full API coverage for Kimai time-tracking software
 - Support for 9 resources:
   - Activity (CRUD, rates, meta fields)
@@ -124,9 +124,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ES2020 target
 - CommonJS module format
 
-[1.2.0]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.2.0
-[1.1.0]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.1.0
-[1.0.3]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.0.3
-[1.0.2]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.0.2
-[1.0.1]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.0.1
-[1.0.0]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai/releases/tag/v1.0.0
+[1.2.0]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/releases/tag/v1.2.0
+[1.1.0]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/releases/tag/v1.1.0
+[1.0.3]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/releases/tag/v1.0.3
+[1.0.2]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/releases/tag/v1.0.2
+[1.0.1]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/releases/tag/v1.0.1
+[1.0.0]: https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro/releases/tag/v1.0.0
