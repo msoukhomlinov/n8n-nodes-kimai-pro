@@ -63,6 +63,7 @@ export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePro
         const begin = this.getCurrentNodeParameter('begin');
         if (begin) {
             qs.start = begin;
+            qs.end = begin;
         }
     } else {
         qs.ignoreDates = '1';

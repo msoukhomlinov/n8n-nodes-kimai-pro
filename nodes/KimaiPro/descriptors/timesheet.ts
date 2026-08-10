@@ -217,6 +217,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 			type: 'options',
 			typeOptions: {
 				loadOptionsMethod: 'getProjects',
+				loadOptionsDependsOn: ['begin'],
 			},
 			required: true,
 			displayOptions: {
