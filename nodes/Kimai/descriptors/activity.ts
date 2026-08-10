@@ -99,7 +99,7 @@ export const activityDescriptor: ResourceDescriptor = {
 						billable: '={{$parameter["billable"] ?? undefined}}',
 						color: '={{$parameter["color"] || undefined}}',
 						invoiceText: '={{$parameter["invoiceText"] || undefined}}',
-						budget: '={{$parameter["budget"] || undefined}}',
+						budget: '={{$parameter["budget"] ?? undefined}}',
 						timeBudget: '={{$parameter["timeBudget"] || undefined}}',
 						budgetType: '={{$parameter["budgetType"] ?? undefined}}',
 					},
