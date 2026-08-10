@@ -56,7 +56,19 @@ export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePro
     const isTimesheetCreate = resource === 'timesheet' && operation === 'create';
     const visible = isTimesheetCreate ? '1' : '3';
 
-    const items = await fetchEntities.call(this, '/api/projects', { visible, ignoreDates: '1' });
+    const qs: Record<string, any> = { visible };
+
+    // For timesheet create, filter by booking date if provided
+    if (isTimesheetCreate) {
+        const begin = this.getCurrentNodeParameter('begin');
+        if (begin) {
+            qs.start = begin;
+        }
+    } else {
+        qs.ignoreDates = '1';
+    }
+
+    const items = await fetchEntities.call(this, '/api/projects', qs);
     return items.map((item: EntityItem) => ({
         name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
         value: String(item.id),
