@@ -19,12 +19,13 @@ async function fetchEntities(this: ILoadOptionsFunctions, url: string, qs?: Reco
     try {
         const credentials = await this.getCredentials('kimaiProApi');
         const baseURL = credentials.apiUrl as string;
+        const apiToken = credentials.apiToken as string;
         const response = await this.helpers.httpRequest({
             method: 'GET',
             url: `${baseURL}${url}`,
             qs: qs || {},
             headers: {
-                Accept: 'application/json',
+                'Authorization': `Bearer ${apiToken}`,
             },
         });
         const items = Array.isArray(response) ? response : (response.data || response.entities || []);
