@@ -145,11 +145,9 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
 
 /**
  * Load user options for picklists.
- * For timesheet collection operations (getAll, getRecent, getActive), prepend an
- * "All users" option so admins can query across all users instead of being silently
- * scoped to the authenticated user's own records.
- * For other contexts (create/update, approval) a specific user is required,
- * so the empty sentinel is kept.
+ * For timesheet "Get All", prepend an "All users" option so privileged users can
+ * explicitly query across all users. For other contexts (create/update, approval)
+ * a specific user is required, so the empty sentinel is kept.
  */
 export async function getUsers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const resource = this.getCurrentNodeParameter('resource') as string;
@@ -157,8 +155,9 @@ export async function getUsers(this: ILoadOptionsFunctions): Promise<INodeProper
 
     const items = await fetchEntities.call(this, '/api/users', { visible: '3' });
 
-    // Timesheet collection endpoints are user-scoped by default; add "All Users" option.
-    if (resource === 'timesheet' && ['getAll', 'getRecent', 'getActive'].includes(operation)) {
+    // Timesheet "Get All" is user-scoped by default; add "All Users" option so
+    // privileged users can explicitly fetch across all users.
+    if (resource === 'timesheet' && operation === 'getAll') {
         return [{ name: 'All Users', value: 'all' }, ...mapToOptions(items)];
     }
 

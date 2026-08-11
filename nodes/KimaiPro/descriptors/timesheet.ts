@@ -66,10 +66,9 @@ export const timesheetDescriptor: ResourceDescriptor = {
 					method: 'GET',
 					url: '/api/timesheets',
 					qs: {
-						// Send user=all by default so the query is not silently scoped to the
-						// authenticated user's own records. Only skip when the user picks a
-						// concrete user ID or leaves it empty to intentionally filter by self.
-						user: '={{$parameter["user"] === "" ? undefined : $parameter["user"]}}',
+						// Only send the single-user `user` param when the multi-user `users[]`
+						// field is empty; the API ignores `users[]` when `user=all`.
+						user: '={{($parameter["users"] || "").trim() === "" ? ($parameter["user"] === "" ? undefined : $parameter["user"]) : undefined}}',
 						customer: '={{$parameter["customer"] || undefined}}',
 						project: '={{$parameter["project"] || undefined}}',
 						activity: '={{$parameter["activity"] || undefined}}',
@@ -185,7 +184,6 @@ export const timesheetDescriptor: ResourceDescriptor = {
 					method: 'GET',
 					url: '/api/timesheets/recent',
 					qs: {
-						user: '={{$parameter["user"] === "" ? undefined : $parameter["user"]}}',
 						begin: '={{$parameter["begin"]}}',
 						size: '={{$parameter["size"]}}',
 					},
@@ -200,9 +198,6 @@ export const timesheetDescriptor: ResourceDescriptor = {
 				request: {
 					method: 'GET',
 					url: '/api/timesheets/active',
-					qs: {
-						user: '={{$parameter["user"] === "" ? undefined : $parameter["user"]}}',
-					},
 				},
 			},
 		},
@@ -319,49 +314,16 @@ export const timesheetDescriptor: ResourceDescriptor = {
 			typeOptions: {
 				loadOptionsMethod: 'getUsers',
 			},
-			description: 'Filter by user. Defaults to "All users" for Get All to avoid being scoped to only the authenticated user.',
+			description: 'Filter by user. Defaults to the authenticated user. Select "All Users" to fetch across all users (requires view_other_timesheet permission).',
 			displayOptions: {
 				show: {
 					resource: [resource],
 					operation: ['create', 'update', 'getAll'],
 				},
 			},
-			// Default to "all" for getAll so it returns all users' timesheets by default.
-			// For create/update, the empty sentinel is used (specific user required).
-			default: '={{$parameter["operation"] === "getAll" ? "all" : ""}}',
+			default: '',
 		},
-		{
-			displayName: 'User',
-			name: 'user',
-			type: 'options',
-			typeOptions: {
-				loadOptionsMethod: 'getUsers',
-			},
-			description: 'Filter by user. Defaults to "All users" to avoid being scoped to only the authenticated user.',
-			displayOptions: {
-				show: {
-					resource: [resource],
-					operation: ['getRecent'],
-				},
-			},
-			default: 'all',
-		},
-		{
-			displayName: 'User',
-			name: 'user',
-			type: 'options',
-			typeOptions: {
-				loadOptionsMethod: 'getUsers',
-			},
-			description: 'Filter by user. Defaults to "All users" to avoid being scoped to only the authenticated user.',
-			displayOptions: {
-				show: {
-					resource: [resource],
-					operation: ['getActive'],
-				},
-			},
-			default: 'all',
-		},
+
 		{
 			displayName: 'Users',
 			name: 'users',
