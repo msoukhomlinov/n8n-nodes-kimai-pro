@@ -85,7 +85,14 @@ export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePro
  * Only includes global activities if the selected project permits them.
  */
 export async function getActivities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const projectId = this.getCurrentNodeParameter('project');
+    const projectParam = this.getCurrentNodeParameter('project');
+    // Skip a project filter when it is an unresolved input-item expression
+    // (e.g. {{$json.projectId}}) that the load-options context cannot resolve.
+    const projectId = typeof projectParam === 'string'
+        && !projectParam.includes('{{')
+        && !projectParam.startsWith('=')
+        ? projectParam
+        : undefined;
     let items: EntityItem[];
 
     if (projectId) {
