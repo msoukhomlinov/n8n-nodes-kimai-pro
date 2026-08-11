@@ -218,7 +218,10 @@ export const teamDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'User ID',
 			name: 'userId',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getUsers',
+			},
 			required: true,
 			displayOptions: {
 				show: {
@@ -231,7 +234,10 @@ export const teamDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Customer ID',
 			name: 'customerId',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getCustomers',
+			},
 			required: true,
 			displayOptions: {
 				show: {
@@ -244,7 +250,10 @@ export const teamDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Project ID',
 			name: 'projectId',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getProjects',
+			},
 			required: true,
 			displayOptions: {
 				show: {
@@ -257,7 +266,10 @@ export const teamDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Activity ID',
 			name: 'activityId',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getActivities',
+			},
 			required: true,
 			displayOptions: {
 				show: {

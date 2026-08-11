@@ -28,7 +28,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 						fixedRate: '={{$parameter["fixedRate"] || undefined}}',
 						hourlyRate: '={{$parameter["hourlyRate"] || undefined}}',
 						user: '={{$parameter["user"] || undefined}}',
-						tags: '={{$parameter["tags"] || undefined}}',
+						tags: '={{Object.keys($parameter["tags"]).join(",") || undefined}}',
 						exported: '={{$parameter["exported"] || undefined}}',
 						billable: '={{$parameter["billable"] ?? true}}',
 					},
@@ -103,7 +103,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 						fixedRate: '={{$parameter["fixedRate"] || undefined}}',
 						hourlyRate: '={{$parameter["hourlyRate"] || undefined}}',
 						user: '={{$parameter["user"] || undefined}}',
-						tags: '={{$parameter["tags"] || undefined}}',
+						tags: '={{Object.keys($parameter["tags"]).join(",") || undefined}}',
 						exported: '={{$parameter["exported"] || undefined}}',
 						billable: '={{$parameter["billable"] ?? undefined}}',
 					},
@@ -214,7 +214,11 @@ export const timesheetDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Project ID',
 			name: 'project',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getProjects',
+				loadOptionsDependsOn: ['begin'],
+			},
 			required: true,
 			displayOptions: {
 				show: {
@@ -227,7 +231,11 @@ export const timesheetDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Activity ID',
 			name: 'activity',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getActivities',
+				loadOptionsDependsOn: ['project'],
+			},
 			required: true,
 			displayOptions: {
 				show: {
@@ -300,7 +308,10 @@ export const timesheetDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'User ID',
 			name: 'user',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getUsers',
+			},
 			displayOptions: {
 				show: {
 					resource: [resource],
@@ -332,7 +343,10 @@ export const timesheetDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Customer ID',
 			name: 'customer',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getCustomers',
+			},
 			displayOptions: {
 				show: {
 					resource: [resource],
@@ -364,7 +378,10 @@ export const timesheetDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Project ID',
 			name: 'project',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getProjects',
+			},
 			displayOptions: {
 				show: {
 					resource: [resource],
@@ -396,7 +413,11 @@ export const timesheetDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Activity ID',
 			name: 'activity',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getActivities',
+				loadOptionsDependsOn: ['project'],
+			},
 			displayOptions: {
 				show: {
 					resource: [resource],
@@ -452,20 +473,22 @@ export const timesheetDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Tags',
 			name: 'tags',
-			type: 'string',
-			description: 'Comma-separated list of tags',
+			type: 'multiOptions',
+			typeOptions: {
+				loadOptionsMethod: 'getTags',
+			},
 			displayOptions: {
 				show: {
 					resource: [resource],
 					operation: ['create', 'update', 'getAll'],
 				},
 			},
-			default: '',
+			default: [],
 			routing: {
 				send: {
 					type: 'query',
 					property: 'tags[]',
-					value: '={{$value ? $value.split(",").map(t => t.trim()) : undefined}}',
+					value: '={{Object.keys($parameter["tags"])}}',
 				},
 			},
 		},

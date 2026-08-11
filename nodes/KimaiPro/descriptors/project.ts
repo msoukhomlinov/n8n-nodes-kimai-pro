@@ -263,7 +263,10 @@ export const projectDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Customer ID',
 			name: 'customer',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getCustomers',
+			},
 			required: true,
 			displayOptions: {
 				show: {
@@ -276,7 +279,10 @@ export const projectDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Customer ID',
 			name: 'customer',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getCustomers',
+			},
 			displayOptions: {
 				show: {
 					resource: [resource],
