@@ -58,10 +58,13 @@ export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePro
 
     const qs: Record<string, any> = { visible };
 
-    // For timesheet create, filter by booking date if provided
+    // For timesheet create, filter by booking date if provided.
+    // Only apply bounds when Begin is a concrete date; skip date filtering
+    // when it is an unresolved expression (e.g. {{$json.begin}}) that the
+    // load-options context cannot resolve against an input item.
     if (isTimesheetCreate) {
-        const begin = this.getCurrentNodeParameter('begin');
-        if (begin) {
+        const begin = this.getCurrentNodeParameter('begin') as string;
+        if (begin && typeof begin === 'string' && !begin.includes('{{') && !begin.startsWith('=')) {
             qs.start = begin;
             qs.end = begin;
         }
