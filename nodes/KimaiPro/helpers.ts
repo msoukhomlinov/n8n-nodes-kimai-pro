@@ -157,8 +157,10 @@ export async function getUsers(this: ILoadOptionsFunctions): Promise<INodeProper
 
     // Timesheet "Get All" is user-scoped by default; add "All Users" option so
     // privileged users can explicitly fetch across all users.
+    // Include empty sentinel so the default '' value is a valid option (prevents
+    // n8n treating it as an unsupported value and allows authenticated-user default).
     if (resource === 'timesheet' && operation === 'getAll') {
-        return [{ name: 'All Users', value: 'all' }, ...mapToOptions(items)];
+        return [{ name: '', value: '' }, { name: 'All Users', value: 'all' }, ...mapToOptions(items)];
     }
 
     // For other contexts (create/update), a specific user is required.
