@@ -68,7 +68,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 					qs: {
 						// Only send the single-user `user` param when the multi-user `users[]`
 						// field is empty; the API ignores `users[]` when `user=all`.
-						user: '={{($parameter["users"] || "").trim() === "" ? ($parameter["userFilter"] === "" ? undefined : $parameter["userFilter"]) : undefined}}',
+						user: '={{($parameter["users"] || "").trim() === "" ? (($parameter["userFilter"] || $parameter["user"] || "") === "" ? undefined : ($parameter["userFilter"] || $parameter["user"])) : undefined}}',
 						customer: '={{$parameter["customer"] || undefined}}',
 						project: '={{$parameter["project"] || undefined}}',
 						activity: '={{$parameter["activity"] || undefined}}',
