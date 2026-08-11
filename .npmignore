@@ -11,10 +11,6 @@ tsconfig.json
 *.swo
 
 # Testing
-scripts/
-docker-compose.yml
-README.DOCKER.md
-Dockerfile.dev
 
 # Documentation (keep main README)
 *.plan.md

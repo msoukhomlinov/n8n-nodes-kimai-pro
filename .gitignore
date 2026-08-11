@@ -31,9 +31,6 @@ test/
 *.test.ts
 jest.config.js
 
-# Docker
-.docker/
-
 # Package manager
 package-lock.json
 

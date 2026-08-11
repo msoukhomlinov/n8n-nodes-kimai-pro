@@ -21,7 +21,6 @@ Please delete options that are not relevant.
 ## Testing
 Please describe the tests you ran to verify your changes:
 - [ ] Tested in local n8n instance
-- [ ] Tested with Docker setup
 - [ ] Verified against Kimai API
 - [ ] Checked for linting errors
 

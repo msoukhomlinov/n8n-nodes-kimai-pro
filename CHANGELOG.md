@@ -116,7 +116,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - User preferences and API token management
 - Official Kimai SVG icon
 - Comprehensive documentation
-- Docker-based development environment
 
 ### Technical Details
 - Built with n8n-workflow API version 1
