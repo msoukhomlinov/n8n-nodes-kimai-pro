@@ -55,7 +55,7 @@ jobs:
           tag_name: v${{ steps.version.outputs.version }}
           name: Release v${{ steps.version.outputs.version }}
           body: |
-            See [CHANGELOG.md](https://github.com/Pixel-Process-UG/n8n-nodes-kimai/blob/main/CHANGELOG.md) for details.
+            See [CHANGELOG.md](https://github.com/msoukhomlinov/n8n-nodes-kimai-pro/blob/main/CHANGELOG.md) for details.
           draft: false
           prerelease: false
         env:

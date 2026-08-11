@@ -463,21 +463,4 @@ MIT
 - Based on the Kimai REST API
 - Forked from [Pixel & Process's n8n-nodes-kimai](https://github.com/Pixel-Process-UG/n8n-nodes-kimai) — original node by [Pixel & Process](https://github.com/Pixel-Process-UG)
 
-## About Pixel & Process
-
-Pixel & Process is a digital agency based in Lübeck, Germany, specializing in:
-
-- 📈 **Performance Marketing** - Google Ads, Meta, LinkedIn
-- 🎨 **Web Design & Development** - Next.js, React, modern web technologies
-- ⚙️ **Process Automation** - n8n, workflow automation, efficiency optimization
-- 🔓 **Open Source Solutions** - GDPR-compliant, sustainable digital transformation
-
-We build tools like this n8n-kimai node to help businesses automate their time tracking and improve efficiency.
-
-🌐 **Website**: [pixelandprocess.de](https://pixelandprocess.de)  
-📧 **Contact**: info@pixel-process.com  
-📍 **Location**: Lübeck, Germany
-
----
-
 **Note**: This is a community-created node and is not officially maintained by n8n GmbH or the Kimai project.
