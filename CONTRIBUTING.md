@@ -6,7 +6,6 @@ Thank you for your interest in contributing to the Kimai n8n node!
 
 ### Prerequisites
 - Node.js 18+ and npm
-- Docker and Docker Compose (for testing)
 - Git
 
 ### Getting Started
@@ -27,19 +26,11 @@ Thank you for your interest in contributing to the Kimai n8n node!
    npm run build
    ```
 
-4. **Start test environment**:
-   ```bash
-   bash scripts/setup.sh
-   ```
-
-See [README.DOCKER.md](README.DOCKER.md) for detailed Docker setup instructions.
-
 ## Development Workflow
 
 1. Make changes to TypeScript files in `credentials/` or `nodes/`
 2. Build: `npm run build`
-3. Test in Docker: `bash scripts/rebuild.sh`
-4. Verify in n8n at http://localhost:5678
+3. Verify in n8n at http://localhost:5678
 
 ## Code Style
 
@@ -55,7 +46,6 @@ n8n-kimai/
 ├── nodes/               # Node implementations
 ├── icons/               # Node icons
 ├── dist/                # Compiled output (gitignored)
-├── scripts/             # Build and deployment scripts
 └── README.md
 ```
 
@@ -72,7 +62,7 @@ n8n-kimai/
 1. **Fork the repository**
 2. **Create a feature branch**: `git checkout -b feature/your-feature`
 3. **Make your changes**
-4. **Test thoroughly** in the Docker environment
+4. **Test thoroughly** before submitting
 5. **Commit**: `git commit -m "Description of changes"`
 6. **Push**: `git push origin feature/your-feature`
 7. **Create a Pull Request**

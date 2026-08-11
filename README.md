@@ -367,10 +367,6 @@ n8n-nodes-kimai-pro/
 │           ├── common.ts          # Shared parameter builders
 │           ├── types.ts           # TypeScript type definitions
 │           └── index.ts           # Descriptor exports
-├── scripts/
-│   ├── build.sh                   # Build script
-│   ├── setup.sh                   # Development setup
-│   └── rebuild.sh                 # Rebuild helper
 ├── package.json                   # Package configuration
 ├── tsconfig.json                  # TypeScript configuration
 ├── README.md                      # This file
