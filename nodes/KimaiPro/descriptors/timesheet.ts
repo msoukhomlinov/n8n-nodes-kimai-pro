@@ -66,7 +66,10 @@ export const timesheetDescriptor: ResourceDescriptor = {
 					method: 'GET',
 					url: '/api/timesheets',
 					qs: {
-						user: '={{$parameter["user"] || undefined}}',
+						// Send user=all by default so the query is not silently scoped to the
+						// authenticated user's own records. Only skip when the user picks a
+						// concrete user ID or leaves it empty to intentionally filter by self.
+						user: '={{$parameter["user"] === "" ? undefined : $parameter["user"]}}',
 						customer: '={{$parameter["customer"] || undefined}}',
 						project: '={{$parameter["project"] || undefined}}',
 						activity: '={{$parameter["activity"] || undefined}}',
@@ -182,6 +185,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 					method: 'GET',
 					url: '/api/timesheets/recent',
 					qs: {
+						user: '={{$parameter["user"] === "" ? undefined : $parameter["user"]}}',
 						begin: '={{$parameter["begin"]}}',
 						size: '={{$parameter["size"]}}',
 					},
@@ -196,6 +200,9 @@ export const timesheetDescriptor: ResourceDescriptor = {
 				request: {
 					method: 'GET',
 					url: '/api/timesheets/active',
+					qs: {
+						user: '={{$parameter["user"] === "" ? undefined : $parameter["user"]}}',
+					},
 				},
 			},
 		},
@@ -306,19 +313,54 @@ export const timesheetDescriptor: ResourceDescriptor = {
 			default: 0,
 		},
 		{
-			displayName: 'User ID',
+			displayName: 'User',
 			name: 'user',
 			type: 'options',
 			typeOptions: {
 				loadOptionsMethod: 'getUsers',
 			},
+			description: 'Filter by user. Defaults to "All users" for Get All to avoid being scoped to only the authenticated user.',
 			displayOptions: {
 				show: {
 					resource: [resource],
 					operation: ['create', 'update', 'getAll'],
 				},
 			},
-			default: '',
+			// Default to "all" for getAll so it returns all users' timesheets by default.
+			// For create/update, the empty sentinel is used (specific user required).
+			default: '={{$parameter["operation"] === "getAll" ? "all" : ""}}',
+		},
+		{
+			displayName: 'User',
+			name: 'user',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getUsers',
+			},
+			description: 'Filter by user. Defaults to "All users" to avoid being scoped to only the authenticated user.',
+			displayOptions: {
+				show: {
+					resource: [resource],
+					operation: ['getRecent'],
+				},
+			},
+			default: 'all',
+		},
+		{
+			displayName: 'User',
+			name: 'user',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getUsers',
+			},
+			description: 'Filter by user. Defaults to "All users" to avoid being scoped to only the authenticated user.',
+			displayOptions: {
+				show: {
+					resource: [resource],
+					operation: ['getActive'],
+				},
+			},
+			default: 'all',
 		},
 		{
 			displayName: 'Users',
