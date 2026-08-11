@@ -68,7 +68,7 @@ export const timesheetDescriptor: ResourceDescriptor = {
 					qs: {
 						// Only send the single-user `user` param when the multi-user `users[]`
 						// field is empty; the API ignores `users[]` when `user=all`.
-						user: '={{($parameter["users"] || "").trim() === "" ? ($parameter["user"] === "" ? undefined : $parameter["user"]) : undefined}}',
+						user: '={{($parameter["users"] || "").trim() === "" ? ($parameter["userFilter"] === "" ? undefined : $parameter["userFilter"]) : undefined}}',
 						customer: '={{$parameter["customer"] || undefined}}',
 						project: '={{$parameter["project"] || undefined}}',
 						activity: '={{$parameter["activity"] || undefined}}',
@@ -314,11 +314,27 @@ export const timesheetDescriptor: ResourceDescriptor = {
 			typeOptions: {
 				loadOptionsMethod: 'getUsers',
 			},
+			description: 'User who recorded the timesheet. Defaults to the authenticated user.',
+			displayOptions: {
+				show: {
+					resource: [resource],
+					operation: ['create', 'update'],
+				},
+			},
+			default: '',
+		},
+		{
+			displayName: 'User',
+			name: 'userFilter',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getUsers',
+			},
 			description: 'Filter by user. Defaults to the authenticated user. Select "All Users" to fetch across all users (requires view_other_timesheet permission).',
 			displayOptions: {
 				show: {
 					resource: [resource],
-					operation: ['create', 'update', 'getAll'],
+					operation: ['getAll'],
 				},
 			},
 			default: '',
