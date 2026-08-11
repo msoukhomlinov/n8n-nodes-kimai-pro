@@ -37,10 +37,17 @@ async function fetchEntities(this: ILoadOptionsFunctions, url: string, qs?: Reco
 }
 
 /**
- * Load customer options for picklists
+ * Load customer options for picklists.
+ * Invoice "Customers" is a multiOptions field (no sentinel needed),
+ * all other contexts are single-value options (sentinel wanted).
  */
 export async function getCustomers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const items = await fetchEntities.call(this, '/api/customers', { visible: '3' });
+    const resource = this.getCurrentNodeParameter('resource') as string;
+    // invoice customers is a multiOptions field - no empty sentinel needed
+    if (resource === 'invoice') {
+        return mapToOptions(items);
+    }
     return [{ name: '', value: '' }, ...mapToOptions(items)];
 }
 
@@ -146,13 +153,14 @@ export async function getUsers(this: ILoadOptionsFunctions): Promise<INodeProper
 
 /**
  * Load tag options for picklists. Tags API uses names, not IDs.
+ * Backs a multiOptions field, so no empty sentinel is added.
  */
 export async function getTags(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const items = await fetchEntities.call(this, '/api/tags/find');
-    return [{ name: '', value: '' }, ...items.map((item) => ({
+    return items.map((item) => ({
         name: item.name || String(item.id),
         value: item.name || String(item.id),
-    }))];
+    }));
 }
 
 /**
