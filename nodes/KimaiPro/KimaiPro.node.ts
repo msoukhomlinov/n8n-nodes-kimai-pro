@@ -65,7 +65,7 @@ export class KimaiPro implements INodeType {
 		name: 'kimaiPro',
 		icon: 'file:kimai.svg',
 		group: ['organization'],
-		version: [1, 2, 3],
+		version: 1,
 
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Interact with Kimai time-tracking API',
