@@ -144,10 +144,26 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
 }
 
 /**
- * Load user options for picklists
+ * Load user options for picklists.
+ * For timesheet "Get All", prepend an "All users" option so privileged users can
+ * explicitly query across all users. For other contexts (create/update, approval)
+ * a specific user is required, so the empty sentinel is kept.
  */
 export async function getUsers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+    const resource = this.getCurrentNodeParameter('resource') as string;
+    const operation = this.getCurrentNodeParameter('operation') as string;
+
     const items = await fetchEntities.call(this, '/api/users', { visible: '3' });
+
+    // Timesheet "Get All" is user-scoped by default; add "All Users" option so
+    // privileged users can explicitly fetch across all users.
+    // Include empty sentinel so the default '' value is a valid option (prevents
+    // n8n treating it as an unsupported value and allows authenticated-user default).
+    if (resource === 'timesheet' && operation === 'getAll') {
+        return [{ name: '', value: '' }, { name: 'All Users', value: 'all' }, ...mapToOptions(items)];
+    }
+
+    // For other contexts (create/update), a specific user is required.
     return [{ name: '', value: '' }, ...mapToOptions(items)];
 }
 
