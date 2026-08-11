@@ -37,11 +37,18 @@ async function fetchEntities(this: ILoadOptionsFunctions, url: string, qs?: Reco
 }
 
 /**
- * Load customer options for picklists
+ * Load customer options for picklists.
+ * Invoice "Customers" is a multiOptions field (no sentinel needed),
+ * all other contexts are single-value options (sentinel wanted).
  */
 export async function getCustomers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const items = await fetchEntities.call(this, '/api/customers', { visible: '3' });
-    return mapToOptions(items);
+    const resource = this.getCurrentNodeParameter('resource') as string;
+    // invoice customers is a multiOptions field - no empty sentinel needed
+    if (resource === 'invoice') {
+        return mapToOptions(items);
+    }
+    return [{ name: '', value: '' }, ...mapToOptions(items)];
 }
 
 /**
@@ -73,10 +80,10 @@ export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePro
     }
 
     const items = await fetchEntities.call(this, '/api/projects', qs);
-    return items.map((item: EntityItem) => ({
+    return [{ name: '', value: '' }, ...items.map((item: EntityItem) => ({
         name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
         value: String(item.id),
-    }));
+    }))];
 }
 
 /**
@@ -130,10 +137,10 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
         items = await fetchEntities.call(this, '/api/activities');
     }
 
-    return items.map((item: EntityItem) => ({
+    return [{ name: '', value: '' }, ...items.map((item: EntityItem) => ({
         name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
         value: String(item.id),
-    }));
+    }))];
 }
 
 /**
@@ -141,11 +148,12 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
  */
 export async function getUsers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const items = await fetchEntities.call(this, '/api/users', { visible: '3' });
-    return mapToOptions(items);
+    return [{ name: '', value: '' }, ...mapToOptions(items)];
 }
 
 /**
  * Load tag options for picklists. Tags API uses names, not IDs.
+ * Backs a multiOptions field, so no empty sentinel is added.
  */
 export async function getTags(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const items = await fetchEntities.call(this, '/api/tags/find');
@@ -160,5 +168,5 @@ export async function getTags(this: ILoadOptionsFunctions): Promise<INodePropert
  */
 export async function getTeams(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
     const items = await fetchEntities.call(this, '/api/teams');
-    return mapToOptions(items);
+    return [{ name: '', value: '' }, ...mapToOptions(items)];
 }
