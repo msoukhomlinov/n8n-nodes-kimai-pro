@@ -13,7 +13,7 @@ Thank you for your interest in contributing to the Kimai n8n node!
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Pixel-Process-UG/n8n-nodes-kimai-pro.git
+   git clone https://github.com/msoukhomlinov/n8n-nodes-kimai-pro.git
    cd n8n-nodes-kimai-pro
    ```
 

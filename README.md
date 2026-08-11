@@ -452,9 +452,8 @@ MIT
 
 ## Author
 
-**Max Soukhomlinov (haftungsbeschränkt)**
+**Max Soukhomlinov**
 
-- Email: info@pixel-process.com
 - GitHub: [@msoukhomlinov](https://github.com/msoukhomlinov)
 
 ## Acknowledgments
@@ -462,7 +461,7 @@ MIT
 - Built on top of [n8n](https://n8n.io/)
 - Integrates with [Kimai](https://www.kimai.org/) time-tracking software
 - Based on the Kimai REST API
-- Created by Pixel & Process - Digital agency for marketing, web development, and automation
+- Forked from [Pixel & Process's n8n-nodes-kimai](https://github.com/Pixel-Process-UG/n8n-nodes-kimai) — original node by [Pixel & Process](https://github.com/Pixel-Process-UG)
 
 ## About Pixel & Process
 
