@@ -1,4 +1,4 @@
-import { INodeType, INodeTypeDescription, INodeProperties } from 'n8n-workflow';
+import { INodeType, INodeTypeDescription, INodeProperties,  } from 'n8n-workflow';
 import type { ResourceDescriptor, OperationDefinition } from './descriptors/types';
 import {
 	activityDescriptor,
@@ -11,6 +11,14 @@ import {
 	invoiceDescriptor,
 	defaultDescriptor,
 } from './descriptors';
+import {
+	getCustomers,
+	getProjects,
+	getActivities,
+	getUsers,
+	getTags,
+	getTeams,
+	} from './helpers';
 
 function buildOperationProperty(descriptor: ResourceDescriptor): INodeProperties {
 	const options: Array<any> = descriptor.operations.map((op: OperationDefinition) => ({
@@ -57,7 +65,7 @@ export class KimaiPro implements INodeType {
 		name: 'kimaiPro',
 		icon: 'file:kimai.svg',
 		group: ['organization'],
-		version: [1, 2],
+		version: [1, 2, 3],
 
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Interact with Kimai time-tracking API',
@@ -127,5 +135,16 @@ export class KimaiPro implements INodeType {
 			},
 			...descriptors.flatMap(buildProperties),
 		],
+	};
+
+	methods = {
+		loadOptions: {
+			getCustomers,
+			getProjects,
+			getActivities,
+			getUsers,
+			getTags,
+			getTeams,
+		},
 	};
 }

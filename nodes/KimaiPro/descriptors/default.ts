@@ -141,7 +141,10 @@ export const defaultDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'User ID',
 			name: 'userId',
-			type: 'string',
+			type: 'options',
+			typeOptions: {
+				loadOptionsMethod: 'getUsers',
+			},
 			description: 'User ID to get approval data for',
 			displayOptions: {
 				show: {

@@ -30,7 +30,7 @@ export const invoiceDescriptor: ResourceDescriptor = {
 					qs: {
 						begin: '={{$parameter["begin"]}}',
 						end: '={{$parameter["end"]}}',
-						'customers[]': '={{$parameter["customers"]}}',
+						'customers[]': '={{Object.keys($parameter["customers"])}}',
 						'status[]': '={{$parameter["status"]}}',
 						page: '={{$parameter["page"]}}',
 						size: '={{$parameter["size"]}}',
@@ -102,22 +102,18 @@ export const invoiceDescriptor: ResourceDescriptor = {
 		{
 			displayName: 'Customers',
 			name: 'customers',
-			type: 'string',
-			description: 'Comma-separated list of customer IDs',
+			type: 'multiOptions',
+			typeOptions: {
+				loadOptionsMethod: 'getCustomers',
+			},
+			description: 'Select customers to filter invoices',
 			displayOptions: {
 				show: {
 					resource: [resource],
 					operation: ['getAll'],
 				},
 			},
-			default: '',
-			routing: {
-				send: {
-					type: 'query',
-					property: 'customers[]',
-					value: '={{$value ? $value.split(",").map(v => v.trim()).filter(v => v) : undefined}}',
-				},
-			},
+			default: [],
 		},
 		{
 			displayName: 'Status',
