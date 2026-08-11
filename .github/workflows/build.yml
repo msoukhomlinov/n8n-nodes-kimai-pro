@@ -75,15 +75,15 @@ jobs:
         run: docker compose exec -T n8n ls -la /data/custom-nodes/
 
       - name: Verify node directory exists
-        run: docker compose exec -T n8n ls -la /data/custom-nodes/n8n-nodes-kimai/
+        run: docker compose exec -T n8n ls -la /data/custom-nodes/n8n-nodes-kimai-pro/
 
       - name: Verify node loaded (dist folder)
-        run: docker compose exec -T n8n ls -la /data/custom-nodes/n8n-nodes-kimai/dist
+        run: docker compose exec -T n8n ls -la /data/custom-nodes/n8n-nodes-kimai-pro/dist
 
       - name: Verify compiled node files
         run: |
-          docker compose exec -T n8n ls -la /data/custom-nodes/n8n-nodes-kimai/dist/nodes/Kimai/
-          docker compose exec -T n8n ls -la /data/custom-nodes/n8n-nodes-kimai/dist/credentials/
+          docker compose exec -T n8n ls -la /data/custom-nodes/n8n-nodes-kimai-pro/dist/nodes/Kimai/
+          docker compose exec -T n8n ls -la /data/custom-nodes/n8n-nodes-kimai-pro/dist/credentials/
 
       - name: Stop Docker Compose
         run: docker compose down
