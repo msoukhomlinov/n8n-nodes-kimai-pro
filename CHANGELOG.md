@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-08-12
+
+### Changed
+- **Internal SDK integration**: Refactored all 87 operations to use `node-kimai` SDK instead of direct HTTP calls
+  - Added `sdk-wrapper.ts` with typed `KimaiSdk` class wrapping all SDK operations
+  - Replaced direct `this.helpers.httpRequest()` calls in helpers.ts with SDK methods
+  - Added `execute()` method to route operations through SDK while preserving descriptor-based UI
+- **Dependency**: Added `node-kimai` as a runtime dependency
+
+### Technical Details
+- No breaking changes to node interface — all resource/operation names and parameters preserved
+- Improved type safety and maintainability via shared SDK
+- Binary data handling for invoice downloads now uses SDK's `ArrayBuffer` response
+
 ## [1.2.0] - 2026-08-10
 
 ### Added
