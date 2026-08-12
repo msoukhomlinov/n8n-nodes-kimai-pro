@@ -4,7 +4,9 @@ export interface OperationDefinition {
 	name: string;
 	value: string;
 	action: string;
-	routing: {
+	// Routing is kept for backwards compatibility with n8n's declarative routing,
+	// but execution is now handled by the node's execute() method using the SDK.
+	routing?: {
 		request: {
 			method: 'GET' | 'POST' | 'PATCH' | 'DELETE';
 			url: string;

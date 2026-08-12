@@ -1,4 +1,5 @@
 import type { ILoadOptionsFunctions, INodePropertyOptions } from 'n8n-workflow';
+import { KimaiSdk } from './sdk-wrapper';
 
 interface EntityItem {
     id: number | string;
@@ -16,24 +17,14 @@ function mapToOptions(items: EntityItem[]): INodePropertyOptions[] {
     }));
 }
 
-async function fetchEntities(this: ILoadOptionsFunctions, url: string, qs?: Record<string, any>): Promise<EntityItem[]> {
-    try {
-        const credentials = await this.getCredentials('kimaiProApi');
-        const baseURL = credentials.apiUrl as string;
-        const apiToken = credentials.apiToken as string;
-        const response = await this.helpers.httpRequest({
-            method: 'GET',
-            url: `${baseURL}${url}`,
-            qs: qs || {},
-            headers: {
-                'Authorization': `Bearer ${apiToken}`,
-            },
-        });
-        const items = Array.isArray(response) ? response : (response.data || response.entities || []);
-        return Array.isArray(items) ? items : [];
-    } catch (e) {
-        return [];
-    }
+/**
+ * Get SDK instance from load options context
+ */
+async function getSdk(this: ILoadOptionsFunctions): Promise<KimaiSdk> {
+    const credentials = await this.getCredentials('kimaiProApi');
+    const baseURL = credentials.apiUrl as string;
+    const apiToken = credentials.apiToken as string;
+    return new KimaiSdk({ apiUrl: baseURL, apiToken });
 }
 
 /**
@@ -42,13 +33,18 @@ async function fetchEntities(this: ILoadOptionsFunctions, url: string, qs?: Reco
  * all other contexts are single-value options (sentinel wanted).
  */
 export async function getCustomers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const items = await fetchEntities.call(this, '/api/customers', { visible: '3' });
-    const resource = this.getCurrentNodeParameter('resource') as string;
-    // invoice customers is a multiOptions field - no empty sentinel needed
-    if (resource === 'invoice') {
-        return mapToOptions(items);
+    try {
+        const sdk = await getSdk.call(this);
+        const items = await sdk.customersList({ visible: '3' });
+        const resource = this.getCurrentNodeParameter('resource') as string;
+        // invoice customers is a multiOptions field - no empty sentinel needed
+        if (resource === 'invoice') {
+            return mapToOptions(items);
+        }
+        return [{ name: '', value: '' }, ...mapToOptions(items)];
+    } catch {
+        return [];
     }
-    return [{ name: '', value: '' }, ...mapToOptions(items)];
 }
 
 /**
@@ -56,34 +52,39 @@ export async function getCustomers(this: ILoadOptionsFunctions): Promise<INodePr
  * Uses visible=1 for timesheet creation, visible=3 for management contexts.
  */
 export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const operation = this.getCurrentNodeParameter('operation') as string;
-    const resource = this.getCurrentNodeParameter('resource') as string;
+    try {
+        const sdk = await getSdk.call(this);
+        const operation = this.getCurrentNodeParameter('operation') as string;
+        const resource = this.getCurrentNodeParameter('resource') as string;
 
-    // Use visible=1 for timesheet create only, visible=3 for update and management
-    const isTimesheetCreate = resource === 'timesheet' && operation === 'create';
-    const visible = isTimesheetCreate ? '1' : '3';
+        // Use visible=1 for timesheet create only, visible=3 for update and management
+        const isTimesheetCreate = resource === 'timesheet' && operation === 'create';
+        const visible = isTimesheetCreate ? '1' : '3';
 
-    const qs: Record<string, any> = { visible };
+        const qs: Record<string, any> = { visible };
 
-    // For timesheet create, filter by booking date if provided.
-    // Only apply bounds when Begin is a concrete date; skip date filtering
-    // when it is an unresolved expression (e.g. {{$json.begin}}) that the
-    // load-options context cannot resolve against an input item.
-    if (isTimesheetCreate) {
-        const begin = this.getCurrentNodeParameter('begin') as string;
-        if (begin && typeof begin === 'string' && !begin.includes('{{') && !begin.startsWith('=')) {
-            qs.start = begin;
-            qs.end = begin;
+        // For timesheet create, filter by booking date if provided.
+        // Only apply bounds when Begin is a concrete date; skip date filtering
+        // when it is an unresolved expression (e.g. {{$json.begin}}) that the
+        // load-options context cannot resolve against an input item.
+        if (isTimesheetCreate) {
+            const begin = this.getCurrentNodeParameter('begin') as string;
+            if (begin && typeof begin === 'string' && !begin.includes('{{') && !begin.startsWith('=')) {
+                qs.start = begin;
+                qs.end = begin;
+            }
+        } else {
+            qs.ignoreDates = '1';
         }
-    } else {
-        qs.ignoreDates = '1';
-    }
 
-    const items = await fetchEntities.call(this, '/api/projects', qs);
-    return [{ name: '', value: '' }, ...items.map((item: EntityItem) => ({
-        name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
-        value: String(item.id),
-    }))];
+        const items = await sdk.projectsList(qs);
+        return [{ name: '', value: '' }, ...items.map((item: EntityItem) => ({
+            name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
+            value: String(item.id),
+        }))];
+    } catch {
+        return [];
+    }
 }
 
 /**
@@ -92,55 +93,52 @@ export async function getProjects(this: ILoadOptionsFunctions): Promise<INodePro
  * Only includes global activities if the selected project permits them.
  */
 export async function getActivities(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const projectParam = this.getCurrentNodeParameter('project');
-    // Skip a project filter when it is an unresolved input-item expression
-    // (e.g. {{$json.projectId}}) that the load-options context cannot resolve.
-    const projectId = typeof projectParam === 'string'
-        && !projectParam.includes('{{')
-        && !projectParam.startsWith('=')
-        ? projectParam
-        : undefined;
-    let items: EntityItem[];
+    try {
+        const sdk = await getSdk.call(this);
+        const projectParam = this.getCurrentNodeParameter('project');
+        // Skip a project filter when it is an unresolved input-item expression
+        // (e.g. {{$json.projectId}}) that the load-options context cannot resolve.
+        const projectId = typeof projectParam === 'string'
+            && !projectParam.includes('{{')
+            && !projectParam.startsWith('=')
+            ? projectParam
+            : undefined;
+        let items: EntityItem[];
 
-    if (projectId) {
-        /* Fetch project-bound activities and global activities separately, then merge. */
-        const [projectItems, globalItems] = await Promise.all([
-            fetchEntities.call(this, '/api/activities', { project: projectId }),
-            fetchEntities.call(this, '/api/activities', { globals: '1' }),
-        ]);
+        if (projectId) {
+            /* Fetch project-bound activities and global activities separately, then merge. */
+            const [projectItems, globalItems] = await Promise.all([
+                sdk.activitiesList({ project: projectId }),
+                sdk.activitiesList({ globals: true }),
+            ]);
 
-        /* Check if the selected project allows global activities */
-        let allowsGlobals = false;
-        try {
-            const credentials = await this.getCredentials('kimaiProApi');
-            const baseURL = credentials.apiUrl as string;
-            const apiToken = credentials.apiToken as string;
-            const projectResponse = await this.helpers.httpRequest({
-                method: 'GET',
-                url: `${baseURL}/api/projects/${projectId}`,
-                headers: { 'Authorization': `Bearer ${apiToken}` },
-            });
-            const project = Array.isArray(projectResponse) ? projectResponse[0] : projectResponse;
-            allowsGlobals = project && project.globalActivities !== false;
-        } catch {
-            /* If detail lookup fails, exclude global activities to be safe */
-            allowsGlobals = false;
+            /* Check if the selected project allows global activities */
+            let allowsGlobals = false;
+            try {
+                const project = await sdk.projectsGetById(Number(projectId));
+                allowsGlobals = project && project.globalActivities !== false;
+            } catch {
+                /* If detail lookup fails, exclude global activities to be safe */
+                allowsGlobals = false;
+            }
+
+            /* Deduplicate by ID — project activities take priority. */
+            const seen = new Set(projectItems.map((i) => String(i.id)));
+            const filteredGlobals = allowsGlobals 
+                ? globalItems.filter((i) => !seen.has(String(i.id)))
+                : [];
+            items = [...projectItems, ...filteredGlobals];
+        } else {
+            items = await sdk.activitiesList();
         }
 
-        /* Deduplicate by ID — project activities take priority. */
-        const seen = new Set(projectItems.map((i) => String(i.id)));
-        const filteredGlobals = allowsGlobals 
-            ? globalItems.filter((i) => !seen.has(String(i.id)))
-            : [];
-        items = [...projectItems, ...filteredGlobals];
-    } else {
-        items = await fetchEntities.call(this, '/api/activities');
+        return [{ name: '', value: '' }, ...items.map((item: EntityItem) => ({
+            name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
+            value: String(item.id),
+        }))];
+    } catch {
+        return [];
     }
-
-    return [{ name: '', value: '' }, ...items.map((item: EntityItem) => ({
-        name: item.parentTitle ? `${item.name} (${item.parentTitle})` : (item.name || String(item.id)),
-        value: String(item.id),
-    }))];
 }
 
 /**
@@ -150,21 +148,26 @@ export async function getActivities(this: ILoadOptionsFunctions): Promise<INodeP
  * a specific user is required, so the empty sentinel is kept.
  */
 export async function getUsers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const resource = this.getCurrentNodeParameter('resource') as string;
-    const operation = this.getCurrentNodeParameter('operation') as string;
+    try {
+        const sdk = await getSdk.call(this);
+        const resource = this.getCurrentNodeParameter('resource') as string;
+        const operation = this.getCurrentNodeParameter('operation') as string;
 
-    const items = await fetchEntities.call(this, '/api/users', { visible: '3' });
+        const items = await sdk.usersList({ visible: '3' });
 
-    // Timesheet "Get All" is user-scoped by default; add "All Users" option so
-    // privileged users can explicitly fetch across all users.
-    // Include empty sentinel so the default '' value is a valid option (prevents
-    // n8n treating it as an unsupported value and allows authenticated-user default).
-    if (resource === 'timesheet' && operation === 'getAll') {
-        return [{ name: '', value: '' }, { name: 'All Users', value: 'all' }, ...mapToOptions(items)];
+        // Timesheet "Get All" is user-scoped by default; add "All Users" option so
+        // privileged users can explicitly fetch across all users.
+        // Include empty sentinel so the default '' value is a valid option (prevents
+        // n8n treating it as an unsupported value and allows authenticated-user default).
+        if (resource === 'timesheet' && operation === 'getAll') {
+            return [{ name: '', value: '' }, { name: 'All Users', value: 'all' }, ...mapToOptions(items)];
+        }
+
+        // For other contexts (create/update), a specific user is required.
+        return [{ name: '', value: '' }, ...mapToOptions(items)];
+    } catch {
+        return [];
     }
-
-    // For other contexts (create/update), a specific user is required.
-    return [{ name: '', value: '' }, ...mapToOptions(items)];
 }
 
 /**
@@ -172,17 +175,27 @@ export async function getUsers(this: ILoadOptionsFunctions): Promise<INodeProper
  * Backs a multiOptions field, so no empty sentinel is added.
  */
 export async function getTags(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const items = await fetchEntities.call(this, '/api/tags/find');
-    return items.map((item) => ({
-        name: item.name || String(item.id),
-        value: item.name || String(item.id),
-    }));
+    try {
+        const sdk = await getSdk.call(this);
+        const items = await sdk.tagsList();
+        return items.map((item) => ({
+            name: item.name || String(item.id),
+            value: item.name || String(item.id),
+        }));
+    } catch {
+        return [];
+    }
 }
 
 /**
  * Load team options for picklists
  */
 export async function getTeams(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-    const items = await fetchEntities.call(this, '/api/teams');
-    return [{ name: '', value: '' }, ...mapToOptions(items)];
+    try {
+        const sdk = await getSdk.call(this);
+        const items = await sdk.teamsList();
+        return [{ name: '', value: '' }, ...mapToOptions(items)];
+    } catch {
+        return [];
+    }
 }
