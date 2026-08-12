@@ -45,7 +45,8 @@
       "dist/credentials/KimaiProApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/KimaiPro/KimaiPro.node.js"
+      "dist/nodes/KimaiPro/KimaiPro.node.js",
+      "dist/nodes/KimaiPro/ai-tools/KimaiProAiTools.node.js"
     ]
   },
   "devDependencies": {
@@ -65,6 +66,8 @@
     "n8n-workflow": "*"
   },
   "dependencies": {
-    "node-kimai": "^1.0.0"
+    "node-kimai": "^1.0.0",
+    "zod": "^3.23.0",
+    "@langchain/core": "^0.3.0"
   }
 }
