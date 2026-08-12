@@ -65,6 +65,6 @@
     "n8n-workflow": "*"
   },
   "dependencies": {
-    "node-kimai": "file:../node-kimai"
+    "node-kimai": "^1.0.0"
   }
 }
