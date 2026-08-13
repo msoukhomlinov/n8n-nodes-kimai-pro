@@ -413,7 +413,8 @@ function jsonSchemaField(description: string) {
     function getTimesheetGetAllSchema() {
         return rz.object({
             term: termSchema,
-            userFilter: userRefSchema,
+            user: userRefSchema,
+            userFilter: userRefSchema.describe('Deprecated: use "user" instead.'),
             users: rz.string().nullish().describe('Comma-separated user IDs.'),
             customer: customerRefSchema,
             customers: rz.string().nullish().describe('Comma-separated customer IDs.'),

@@ -221,11 +221,14 @@ export class KimaiSdk {
   async timesheetsList(params: Record<string, any> = {}): Promise<any[]> {
     const query: Record<string, any> = {};
 
-    // Handle user/userFilter - use user for single user, users[] for multiple
+    // Handle user filter: user (primary), userFilter (deprecated alias), users[] (multiple)
     if (params.users && String(params.users).trim() !== '') {
       const users = String(params.users).split(',').map((v: string) => v.trim()).filter(Boolean);
       if (users.length > 0) query.users = users;
-    } else if (params.userFilter) {
+    } else if (params.user !== undefined && params.user !== null && String(params.user).trim() !== '') {
+      query.user = params.user;
+    } else if (params.userFilter !== undefined && params.userFilter !== null) {
+      // Backward compatibility: userFilter is deprecated, maps to user
       query.user = params.userFilter;
     }
 
