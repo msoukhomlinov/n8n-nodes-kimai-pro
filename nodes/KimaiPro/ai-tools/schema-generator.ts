@@ -60,14 +60,14 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
         'Date in ISO format (YYYY-MM-DD) or datetime (YYYY-MM-DDTHH:mm:ss).'
     );
     const booleanSchema = rz.boolean().nullish().describe('Boolean value.');
-    const stringSchema = rz.string().nullish().describe('String value.');
+    const stringSchema = rz.string().nullish().describe('Optional string value. Omit if not applicable.');
     const termSchema = rz.string().nullish().describe(
         'Search term for partial text match across name and common fields.'
     );
 
     // Reference ID schemas (use string for MCP compatibility — label resolution handles name→ID)
     const refIdSchema = rz.string().nullish().describe(
-        'Numeric ID or name string (resolved automatically).'
+        'Numeric ID or name string. If name has multiple matches, first result is used.'
     );
     const projectRefSchema = rz.string().nullish().describe(
         'Project ID or name.'
@@ -83,9 +83,10 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
     const tagRefSchema = rz.string().nullish().describe(
         'Tag name or ID.'
     );
-    const jsonSchema = rz.string().nullish().describe(
-        'JSON string representing the data structure.'
-    );
+    // Helper to create JSON field schemas with specific descriptions
+function jsonSchemaField(description: string) {
+    return rz.string().nullish().describe(description);
+}
 
     // Activity schemas
     function getActivityGetAllSchema() {
@@ -115,7 +116,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
             budget: rz.number().nullish().describe('Budget amount.'),
             timeBudget: rz.number().nullish().describe('Time budget in seconds.'),
             budgetType: stringSchema,
-            teams: jsonSchema,
+            teams: jsonSchemaField('JSON array of team IDs, e.g., \'[1, 3]\'.'),
         });
     }
     function getActivityUpdateSchema() {
@@ -132,7 +133,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
             budget: rz.number().nullish().describe('Budget amount.'),
             timeBudget: rz.number().nullish().describe('Time budget in seconds.'),
             budgetType: stringSchema,
-            teams: jsonSchema,
+            teams: jsonSchemaField('JSON array of team IDs, e.g., \'[1, 3]\'.'),
         });
     }
     function getActivityUpdateMetaSchema() {
@@ -204,7 +205,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
             buyerReference: stringSchema,
             color: stringSchema,
             invoiceEmail: stringSchema,
-            customerTeams: jsonSchema,
+            customerTeams: jsonSchemaField('JSON array of team IDs, e.g., \'[1, 3]\'.'),
             budget: rz.number().nullish().describe('Budget amount.'),
             timeBudget: rz.number().nullish().describe('Time budget in seconds.'),
             budgetType: stringSchema,
@@ -240,7 +241,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
             buyerReference: stringSchema,
             color: stringSchema,
             invoiceEmail: stringSchema,
-            customerTeams: jsonSchema,
+            customerTeams: jsonSchemaField('JSON array of team IDs, e.g., \'[1, 3]\'.'),
             budget: rz.number().nullish().describe('Budget amount.'),
             timeBudget: rz.number().nullish().describe('Time budget in seconds.'),
             budgetType: stringSchema,
@@ -327,7 +328,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
             start: dateSchema,
             end: dateSchema,
             color: stringSchema,
-            projectTeams: jsonSchema,
+            projectTeams: jsonSchemaField('JSON array of team IDs, e.g., \'[1, 3]\'.'),
             budget: rz.number().nullish().describe('Budget amount.'),
             timeBudget: rz.number().nullish().describe('Time budget in seconds.'),
             budgetType: stringSchema,
@@ -349,7 +350,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
             start: dateSchema,
             end: dateSchema,
             color: stringSchema,
-            projectTeams: jsonSchema,
+            projectTeams: jsonSchemaField('JSON array of team IDs, e.g., \'[1, 3]\'.'),
             budget: rz.number().nullish().describe('Budget amount.'),
             timeBudget: rz.number().nullish().describe('Time budget in seconds.'),
             budgetType: stringSchema,
@@ -530,7 +531,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
             locale: stringSchema,
             timezone: stringSchema,
             supervisor: rz.string().nullish().describe('Supervisor user ID (as string).'),
-            roles: jsonSchema,
+            roles: jsonSchemaField('JSON array of role names, e.g., \'["ROLE_USER"]\'.'),
             plainPassword: rz.string().describe('Plain text password.'),
             plainApiToken: stringSchema,
             enabled: booleanSchema,
@@ -550,7 +551,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
             locale: stringSchema,
             timezone: stringSchema,
             supervisor: rz.string().nullish().describe('Supervisor user ID (as string).'),
-            roles: jsonSchema,
+            roles: jsonSchemaField('JSON array of role names, e.g., \'["ROLE_USER"]\'.'),
             enabled: booleanSchema,
             systemAccount: booleanSchema,
             requiresPasswordReset: booleanSchema,
@@ -559,7 +560,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
     function getUserUpdatePreferencesSchema() {
         return rz.object({
             id: idSchema,
-            preferences: jsonSchema,
+            preferences: jsonSchemaField('JSON object of user preferences, e.g., \'{"timezone": "UTC"}\'.'),
         });
     }
     function getUserDeleteApiTokenSchema() {
@@ -595,7 +596,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
     function getTeamCreateSchema() {
         return rz.object({
             name: rz.string().describe('Team name.'),
-            members: jsonSchema,
+            members: jsonSchemaField("JSON array of member objects with 'id' and 'username', e.g., '[{\"id\": 1}]'."),
             color: stringSchema,
         });
     }
@@ -603,7 +604,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
         return rz.object({
             id: idSchema,
             name: stringSchema,
-            members: jsonSchema,
+            members: jsonSchemaField("JSON array of member objects with 'id' and 'username', e.g., '[{\"id\": 1}]'."),
             color: stringSchema,
         });
     }
@@ -673,7 +674,7 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
     function getInvoiceUpdateCustomFieldsSchema() {
         return rz.object({
             id: idSchema,
-            customFields: jsonSchema,
+            customFields: jsonSchemaField('JSON object of custom field values, e.g., \'{"field1": "value1"}\'.'),
         });
     }
     function getInvoiceDownloadSchema() {

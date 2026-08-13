@@ -19,7 +19,7 @@ const RESOURCE_HINTS: Record<string, string> = {
  * Single envelope statement appended to every tool description.
  */
 const ENVELOPE_PREAMBLE =
-  "Envelope v3 — 'error' key = failure; default-valued fields omitted.";
+  "Response format: success returns data with 'data' key; errors return 'error' key with message. Fields with default values may be omitted from responses.";
 
 /**
  * Build the unified tool description passed to the LLM as the
@@ -45,7 +45,7 @@ export function buildUnifiedDescription(
     parts.push(`Manage Kimai ${resourceLabel} records.`);
     parts.push(`Operations: ${enabledOps.join(', ')}.`);
     if (writeOps.length > 0) {
-        parts.push(`Write operations require allowWrites toggle enabled.`);
+        parts.push(`Write operations require write permissions enabled.`);
     }
     if (hint) {
         parts.push(hint);
