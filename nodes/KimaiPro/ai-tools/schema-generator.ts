@@ -78,9 +78,8 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
     const activityRefSchema = rz.string().nullish().describe(
         'Activity ID or name.'
     );
-    const userRefSchema = rz.string().nullish().describe(
-        'User ID or username.'
-    );
+    const userRefSchema = rz.union([rz.string(), rz.number()]).nullish()
+        .describe('User ID (number or string) or username.');
     const tagRefSchema = rz.string().nullish().describe(
         'Tag name or ID.'
     );
