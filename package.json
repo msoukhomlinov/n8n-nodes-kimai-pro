@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-kimai-pro",
-  "version": "1.3.0",
+  "version": "1.3.2",
   "description": "n8n community node for Kimai time-tracking software API integration",
   "keywords": [
     "n8n-community-node-package",

@@ -1,9 +1,21 @@
 # Changelog
 
+## 1.3.2 (2026-08-13)
+- fix(ai-tools): operation field now has default value to prevent LLM tool call validation errors
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.3.1] - 2026-08-14
+
+### Fixed
+- **AI Tools node: write operations filtering** — `WRITE_OPERATIONS` set was missing `update` and `delete`, causing them to appear in the Operations picklist when "Allow Writes" was OFF
+- **AI Tools node: property evaluation order** — `allowWrites` property was defined after `operations` (which depends on it via `loadOptionsDependsOn`), preventing n8n UI from reliably re-evaluating the operations list when the toggle changed
+- **AI Tools node: icon path** — fixed relative path to use shared `kimai.svg` from parent directory
+
+[1.3.1]: https://github.com/msoukhomlinov/n8n-nodes-kimai-pro/releases/tag/v1.3.1
 
 ## [1.3.0] - 2026-08-12
 

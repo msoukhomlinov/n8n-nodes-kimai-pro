@@ -882,9 +882,11 @@ export function getRuntimeSchemaBuilders(rz: RuntimeZod) {
             if (cached) return cached;
         }
 
+        const defaultOp = enabledOps.includes('getAll') ? 'getAll' : enabledOps[0]!;
         const operationEnum = rz
             .enum(enabledOps as [string, ...string[]])
-            .describe(`Operation to perform. Allowed values: ${enabledOps.join(', ')}.`);
+            .default(defaultOp)
+            .describe(`Operation to perform. Allowed values: ${enabledOps.join(', ')}. Default: ${defaultOp}.`);
 
                 const fieldSources = new Map<string, any>();
         const fieldOps = new Map<string, Set<string>>();

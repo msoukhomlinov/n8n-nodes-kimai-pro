@@ -17,7 +17,7 @@ const NUMERIC_FIELDS = new Set<string>(['id', 'rateId', 'commentId', 'tokenId', 
 
 // Write operations classification
 export const WRITE_OPERATIONS = new Set([
-    'create', 'update', 'updateMeta', 'addRate', 'deleteRate', 'addComment', 'deleteComment',
+    'create', 'update', 'delete', 'updateMeta', 'addRate', 'deleteRate', 'addComment', 'deleteComment',
     'togglePin', 'addTeam', 'stop', 'restart', 'duplicate', 'toggleExport',
     'updatePreferences', 'deleteApiToken', 'addMember', 'removeMember',
     'grantCustomer', 'revokeCustomer', 'grantProject', 'revokeProject',

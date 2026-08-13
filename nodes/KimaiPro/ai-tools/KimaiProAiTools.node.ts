@@ -49,7 +49,7 @@ export class KimaiProAiTools implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'Kimai Pro AI Tools',
         name: 'kimaiProAiTools',
-        icon: 'file:kimai.svg',
+        icon: 'file:../kimai.svg',
         group: ['output'],
         version: 1,
         description: 'Expose Kimai Pro operations as AI tools for the AI Agent and MCP Server Trigger',
@@ -69,6 +69,13 @@ export class KimaiProAiTools implements INodeType {
                 description: 'Choose the Kimai resource to expose as AI tools',
             },
             {
+                displayName: 'Allow Writes',
+                name: 'allowWrites',
+                type: 'boolean',
+                default: false,
+                description: 'Enable write operations (create, update, delete, etc.). When disabled, only read operations are available.',
+            },
+            {
                 displayName: 'Operations',
                 name: 'operations',
                 type: 'multiOptions',
@@ -79,13 +86,6 @@ export class KimaiProAiTools implements INodeType {
                 },
                 default: [],
                 description: 'Select operations to expose. Write operations require "Allow Writes" enabled.',
-            },
-            {
-                displayName: 'Allow Writes',
-                name: 'allowWrites',
-                type: 'boolean',
-                default: false,
-                description: 'Enable write operations (create, update, delete, etc.). When disabled, only read operations are available.',
             },
         ],
     };
