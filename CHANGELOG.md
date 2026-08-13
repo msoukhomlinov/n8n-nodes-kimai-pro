@@ -2,6 +2,7 @@
 
 ## 1.3.2 (2026-08-13)
 - fix(ai-tools): operation field now has default value to prevent LLM tool call validation errors
+- fix(ai-tools): accept numeric IDs for userFilter parameter in timesheet getAll (previously string-only)
 
 All notable changes to this project will be documented in this file.
 
