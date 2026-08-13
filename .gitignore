@@ -34,10 +34,17 @@ jest.config.js
 # Package manager
 package-lock.json
 
-# API docs (development only)
+
 
 # Temporary files
 *.tmp
 *.temp
 
 CLAUDE.md
+# AI Coding Agent files
+.ai-tools-*.md
+.refactor-analysis.md
+.prime/
+.mcp.json
+AGENTS.md
+api-docs-v1.1.json
