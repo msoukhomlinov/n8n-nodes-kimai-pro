@@ -126,6 +126,9 @@ function enrichRecord(record: Record<string, unknown>, cache: EnrichmentCache): 
                 const cust = cache.customers.get(projCustId);
                 if (cust) enriched.customerName = cust.name;
             }
+        } else if (!enriched.projectName && enriched.parentTitle) {
+            // Fallback: use parentTitle from API response (e.g., for activities)
+            enriched.projectName = enriched.parentTitle as string;
         }
     }
 
