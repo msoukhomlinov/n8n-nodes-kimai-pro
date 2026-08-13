@@ -4,6 +4,7 @@
 - fix(ai-tools): operation field now has default value to prevent LLM tool call validation errors
 - fix(ai-tools): accept numeric IDs for userFilter parameter in timesheet getAll (previously string-only)
 - fix(ai-tools): improve tool descriptions — remove internal terminology, add JSON field examples, clarify reference field behavior
+- fix(ai-tools): add projectName fallback enrichment for activity records using API parentTitle field
 
 All notable changes to this project will be documented in this file.
 
