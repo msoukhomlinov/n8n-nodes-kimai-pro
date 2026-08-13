@@ -6,6 +6,7 @@
 - fix(ai-tools): improve tool descriptions — remove internal terminology, add JSON field examples, clarify reference field behavior
 - fix(ai-tools): add projectName fallback enrichment for activity records using API parentTitle field
 - fix(ai-tools): standardize filter parameter naming in timesheet getAll (userFilter → user, userFilter kept as deprecated alias)
+- fix(ai-tools): add parameter documentation to tool descriptions as workaround for MCP tools/list empty schemas
 
 All notable changes to this project will be documented in this file.
 
