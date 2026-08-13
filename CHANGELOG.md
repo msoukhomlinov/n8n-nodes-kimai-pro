@@ -5,6 +5,7 @@
 - fix(ai-tools): accept numeric IDs for userFilter parameter in timesheet getAll (previously string-only)
 - fix(ai-tools): improve tool descriptions — remove internal terminology, add JSON field examples, clarify reference field behavior
 - fix(ai-tools): add projectName fallback enrichment for activity records using API parentTitle field
+- fix(ai-tools): standardize filter parameter naming in timesheet getAll (userFilter → user, userFilter kept as deprecated alias)
 
 All notable changes to this project will be documented in this file.
 
