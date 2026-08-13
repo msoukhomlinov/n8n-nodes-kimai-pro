@@ -1,24 +1,34 @@
 # Changelog
 
-## 1.3.2 (2026-08-13)
-- fix(ai-tools): operation field now has default value to prevent LLM tool call validation errors
-- fix(ai-tools): accept numeric IDs for userFilter parameter in timesheet getAll (previously string-only)
-- fix(ai-tools): improve tool descriptions — remove internal terminology, add JSON field examples, clarify reference field behavior
-- fix(ai-tools): add projectName fallback enrichment for activity records using API parentTitle field
-- fix(ai-tools): standardize filter parameter naming in timesheet getAll (userFilter → user, userFilter kept as deprecated alias)
-- fix(ai-tools): add parameter documentation to tool descriptions as workaround for MCP tools/list empty schemas
-
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [Unreleased]
 
-## [1.3.1] - 2026-08-14
+## [1.3.2] - 2026-08-14
 
 ### Fixed
 - **AI Tools node: write operations filtering** — `WRITE_OPERATIONS` set was missing `update` and `delete`, causing them to appear in the Operations picklist when "Allow Writes" was OFF
 - **AI Tools node: property evaluation order** — `allowWrites` property was defined after `operations` (which depends on it via `loadOptionsDependsOn`), preventing n8n UI from reliably re-evaluating the operations list when the toggle changed
 - **AI Tools node: icon path** — fixed relative path to use shared `kimai.svg` from parent directory
+
+[1.3.2]: https://github.com/msoukhomlinov/n8n-nodes-kimai-pro/releases/tag/v1.3.2
+
+## [1.3.1] - 2026-08-13
+
+### Added
+- **AI Tools node**: New node for MCP Server Trigger and AI Agent support
+  - Provides structured tool calls for all Kimai Pro API operations via MCP protocol
+  - Supports all 9 resources: Activity, Customer, Project, Tag, Team, Timesheet, User, Invoice, Default
+  - Configurable write access toggle to restrict operations to read-only mode
+  - Designed for integration with AI agents and MCP-compatible clients
+
+### Fixed
+- **AI Tools node: operation field default** — added default value to prevent LLM tool call validation errors
+- **AI Tools node: numeric ID support** — timesheet getAll now accepts numeric IDs for userFilter parameter
+- **AI Tools node: tool descriptions** — improved descriptions with JSON field examples and clarified reference field behavior
+- **AI Tools node: activity enrichment** — added projectName fallback using API parentTitle field
+- **AI Tools node: parameter naming** — standardized filter parameters in timesheet getAll (userFilter → user, with deprecated alias)
+- **AI Tools node: MCP schema workaround** — added inline parameter documentation to tool descriptions
 
 [1.3.1]: https://github.com/msoukhomlinov/n8n-nodes-kimai-pro/releases/tag/v1.3.1
 

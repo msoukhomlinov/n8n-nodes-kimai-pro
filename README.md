@@ -7,7 +7,8 @@ An n8n community node for integrating with [Kimai](https://www.kimai.org/) time-
 
 ## Features
 
-- **Modular Architecture**: Refactored from a monolithic implementation into 12 focused descriptor files, making the codebase easier to maintain, extend, and review
+- **Modular Architecture**: Refactored from a monolithic implementation into 12 focused descriptor files under `nodes/KimaiPro/descriptors/`, making the codebase easier to maintain, extend, and review
+- **AI Tools Node**: Expose Kimai Pro operations as AI tools for AI Agent and MCP Server Trigger workflows
 - **Complete API Coverage**: Supports 87 operations across 9 resources — all public Kimai Pro API endpoints
 - **Resource Management**:
   - Activities (CRUD, rates, meta fields, team assignment)
@@ -27,7 +28,7 @@ An n8n community node for integrating with [Kimai](https://www.kimai.org/) time-
 
 ## Architecture
 
-The node uses a modular descriptor-based architecture. Each Kimai resource (Activity, Customer, Project, etc.) is defined in its own TypeScript file under `nodes/Kimai/descriptors/`. This structure:
+The node uses a modular descriptor-based architecture. Each Kimai resource (Activity, Customer, Project, etc.) is defined in its own TypeScript file under `nodes/KimaiPro/descriptors/`. This structure:
 
 - **Separates concerns**: Each resource has its own file for operations, parameters, and routing
 - **Simplifies maintenance**: Changes to one resource don't affect others
@@ -35,8 +36,11 @@ The node uses a modular descriptor-based architecture. Each Kimai resource (Acti
 - **Improves readability**: Clear, focused files are easier to review and understand
 
 ```
-nodes/Kimai/
-├── Kimai.node.ts              # Main node (orchestrates descriptors)
+nodes/KimaiPro/
+├── KimaiPro.node.ts           # Main node (orchestrates descriptors)
+├── helpers.ts                 # Shared utility functions
+├── sdk-wrapper.ts             # Kimai SDK integration
+├── kimai.svg                  # Node icon
 ├── descriptors/
 │   ├── activity.ts            # Activity operations (10)
 │   ├── customer.ts            # Customer operations (14)
@@ -70,12 +74,12 @@ cd ~/.n8n/nodes
 npm install n8n-nodes-kimai-pro
 ```
 
-Restart n8n to load the node.
+Restart n8n to load the nodes. This installs both the **Kimai Pro** node and the **Kimai Pro AI Tools** node.
 
 ## Credentials Setup
 
 1. In n8n, go to **Credentials** → **Add Credential**
-2. Search for **Kimai Pro API**
+2. Search for **Kimai API**
 3. Configure:
    - **API URL**: Base URL of your Kimai instance (e.g., `https://kimai.example.com`)
    - **API Token**: Your Kimai Pro API token (Bearer token)
@@ -203,11 +207,50 @@ Restart n8n to load the node.
 - **Get Weekly Overtime**: Get overtime for a week
 - **Add to Approve**: Submit timesheets for approval
 
+## AI Tools Node
+
+The **Kimai Pro AI Tools** node exposes Kimai Pro operations as AI tools, enabling AI Agent and MCP Server Trigger nodes to interact with your Kimai instance directly.
+
+### How It Works
+
+Instead of individual tools for each operation, the AI Tools node provides a unified tool per resource (e.g., `kimaiPro_timesheet`) with an `operation` field in the tool call. This keeps the tool surface clean while providing full API coverage.
+
+### Configuration
+
+- **Resource**: Select which resource to expose (Activity, Customer, Project, Timesheet, User, Tag, Team, Invoice, or Default/System)
+- **Allow Writes**: Toggle to enable write operations (create, update, delete). Read-only by default for safety
+- **Operations**: Multi-select of available operations, dynamically filtered based on the Allow Writes setting
+
+### Tool Naming
+
+Each resource exposes a single tool named `kimaiPro_{resource}`:
+- `kimaiPro_activity`
+- `kimaiPro_customer`
+- `kimaiPro_project`
+- `kimaiPro_timesheet`
+- `kimaiPro_user`
+- `kimaiPro_tag`
+- `kimaiPro_team`
+- `kimaiPro_invoice`
+- `kimaiPro_default` (system operations)
+
+### Usage
+
+Connect the AI Tools node to an **AI Agent** node or **MCP Server Trigger** node. The AI can then call Kimai operations as tools, passing parameters like IDs, filters, and request bodies as needed.
+
+### Response Enrichment
+
+Responses include related names alongside IDs for easier AI reasoning. For example, a timesheet response includes `customerName` and `projectName` fields in addition to their IDs.
+
+### Write Safety
+
+Write operations are opt-in via the "Allow Writes" toggle. Destructive operations (delete, update) are tracked and clearly labeled to prevent accidental data modification.
+
 ## Usage Examples
 
 ### Example 1: Create a Timesheet Entry
 
-1. Add a **Kimai** node to your workflow
+1. Add a **Kimai Pro** node to your workflow
 2. Select **Resource**: Timesheet
 3. Select **Operation**: Create
 4. Fill in:
@@ -219,14 +262,14 @@ Restart n8n to load the node.
 
 ### Example 2: Get All Active Timesheets
 
-1. Add a **Kimai** node
+1. Add a **Kimai Pro** node
 2. Select **Resource**: Timesheet
 3. Select **Operation**: Get Active
 4. The node will return all active timesheets for the current user
 
 ### Example 3: Filter Timesheets by Date Range
 
-1. Add a **Kimai** node
+1. Add a **Kimai Pro** node
 2. Select **Resource**: Timesheet
 3. Select **Operation**: Get All
 4. Configure filters:
@@ -236,7 +279,7 @@ Restart n8n to load the node.
 
 ### Example 4: Create a Customer
 
-1. Add a **Kimai** node
+1. Add a **Kimai Pro** node
 2. Select **Resource**: Customer
 3. Select **Operation**: Create
 4. Fill in required fields:
@@ -244,6 +287,19 @@ Restart n8n to load the node.
    - **Country**: `US`
    - **Currency**: `USD`
    - **Timezone**: `America/New_York`
+
+### Example 5: Using AI Tools with AI Agent
+
+1. Add a **Kimai Pro AI Tools** node
+2. Configure:
+   - **Resource**: Timesheet
+   - **Allow Writes**: Enable if the AI should create/modify timesheets
+   - **Operations**: Select the operations you want the AI to use (e.g., Create, Get All, Stop)
+3. Add a **Kimai Pro** node (for credentials) and connect it to the AI Tools node
+4. Add an **AI Agent** node and connect the AI Tools node to it
+5. Prompt the AI Agent — it can now call Kimai operations as tools
+
+The AI Agent can query timesheets, create entries, stop active timesheets, and more — all through natural language instructions.
 
 ## Query Parameters
 
@@ -342,7 +398,7 @@ npm run dev
    ```
 
 2. Link to your n8n installation and restart n8n
-3. In n8n, add the Kimai node to a workflow and test the operations
+3. In n8n, add the Kimai Pro node to a workflow and test the operations
 
 ### Project Structure
 
@@ -351,9 +407,19 @@ n8n-nodes-kimai-pro/
 ├── credentials/
 │   └── KimaiApi.credentials.ts    # API credentials configuration
 ├── nodes/
-│   └── Kimai/
-│       ├── Kimai.node.ts          # Main node (orchestrates descriptors)
+│   └── KimaiPro/
+│       ├── KimaiPro.node.ts       # Main node (orchestrates descriptors)
+│       ├── helpers.ts             # Shared utility functions
+│       ├── sdk-wrapper.ts         # Kimai SDK integration
 │       ├── kimai.svg              # Node icon
+│       ├── ai-tools/
+│       │   ├── KimaiProAiTools.node.ts
+│       │   ├── schema-generator.ts
+│       │   ├── tool-executor.ts
+│       │   ├── description-builders.ts
+│       │   ├── error-formatter.ts
+│       │   ├── response-builder.ts
+│       │   └── runtime.ts
 │       └── descriptors/           # Modular resource descriptors
 │           ├── activity.ts        # Activity operations
 │           ├── customer.ts        # Customer operations
@@ -397,6 +463,8 @@ This node implements all major Kimai Pro API endpoints:
 ✅ System (Config, colors, ping, version, plugins)  
 
 **Total: 87 operations across 9 resources.**
+
+All 87 operations are also available via the AI Tools node for AI Agent and MCP workflows.
 
 Based on the official Kimai REST API.
 
